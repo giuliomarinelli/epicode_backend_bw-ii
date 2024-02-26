@@ -1,4 +1,4 @@
-package it.epicode.backend.bwii.epic_energy_services.Models.repositories;
+package it.epicode.backend.bwii.epic_energy_services.repositories;
 
 import it.epicode.backend.bwii.epic_energy_services.Models.entities.Comune;
 import org.springframework.data.jpa.repository.JpaRepository;

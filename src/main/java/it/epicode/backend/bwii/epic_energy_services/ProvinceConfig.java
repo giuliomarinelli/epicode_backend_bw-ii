@@ -1,7 +1,7 @@
 package it.epicode.backend.bwii.epic_energy_services;
 
 import it.epicode.backend.bwii.epic_energy_services.Models.entities.Provincia;
-import it.epicode.backend.bwii.epic_energy_services.Models.repositories.ProvinciaRepository;
+import it.epicode.backend.bwii.epic_energy_services.repositories.ProvinciaRepository;
 import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,7 +13,6 @@ import org.springframework.stereotype.Component;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
-import java.sql.SQLException;
 
 
 @Component

@@ -22,6 +22,8 @@ public class Utente {
     private UUID id;
 
     private String username;
+
+    @Column(unique = true)
     private String email;
     private String password;
     private String nome;
