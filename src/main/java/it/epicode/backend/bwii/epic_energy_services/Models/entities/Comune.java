@@ -23,8 +23,9 @@ public class Comune {
     @JoinColumn(name = "sigla_provincia", nullable = false)
     private Provincia provincia;
 
-    @OneToMany(mappedBy = "indirizzi", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "comune", fetch = FetchType.EAGER)
     private List<Indirizzo> indirizzi;
+
 
 
 
