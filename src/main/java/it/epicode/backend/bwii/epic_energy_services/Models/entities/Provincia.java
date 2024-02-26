@@ -23,6 +23,9 @@ public class Provincia {
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "provincia")
     private List<Comune> comuni = new ArrayList<>();
 
-
-
+    public Provincia(String sigla, String nome, String regione) {
+        this.sigla = sigla;
+        this.nome = nome;
+        this.regione = regione;
+    }
 }
