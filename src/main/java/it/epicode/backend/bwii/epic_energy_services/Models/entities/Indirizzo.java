@@ -27,4 +27,9 @@ public class Indirizzo {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "comune_id", nullable = false)
     private Comune comune;
+
+    @OneToOne
+    @JoinColumn(name = "cliente_id")
+    private Cliente cliente;
+
 }
