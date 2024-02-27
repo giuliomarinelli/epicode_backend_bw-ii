@@ -1,11 +1,20 @@
 package it.epicode.backend.bwii.epic_energy_services.repositories;
 
-import it.epicode.backend.bwii.epic_energy_services.Models.entities.Cliente;
+
+
 import it.epicode.backend.bwii.epic_energy_services.Models.entities.Fattura;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.repository.PagingAndSortingRepository;
+
+
+
+
+import it.epicode.backend.bwii.epic_energy_services.Models.entities.Cliente;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+
+
 
 import java.time.LocalDate;
 
@@ -20,4 +29,5 @@ public interface FatturaRepository extends JpaRepository<Fattura, Integer>, Pagi
     Page<Fattura> findByAnnoOrderByDataAsc          (int anno, Pageable pageable);
 
     Page<Fattura> findByImportoBetweenOrderByDataAsc(double minImporto, double maxImporto, Pageable pageable);
+
 }

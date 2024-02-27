@@ -39,4 +39,12 @@ public class Indirizzo {
         return via + " " + civico + " ( " + loc + "), " + cap + " " + comune +
                 " (" + comune.getProvincia().getSigla() + "), " + comune.getProvincia().getRegione();
     }
-}
+
+    public Indirizzo(String via, String civico, String localita, int cap,Comune comune,Cliente cliente){
+        this.via = via;
+        this.civico = civico;
+        this.localita = localita;
+        this.cap = cap;
+        this.comune=comune;
+        this.cliente=cliente;
+}}

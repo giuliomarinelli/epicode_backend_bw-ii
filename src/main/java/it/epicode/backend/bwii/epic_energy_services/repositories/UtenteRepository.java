@@ -21,4 +21,5 @@ public interface UtenteRepository extends JpaRepository<Utente, UUID>, PagingAnd
 
     public Optional<Utente> findByUsername(String username);
 
+
 }
