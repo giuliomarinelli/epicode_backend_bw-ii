@@ -35,7 +35,7 @@ public class JwtTools {
             Jwts.parser().verifyWith(Keys.hmacShaKeyFor(secret.getBytes()))
                     .build().parse(token);
         } catch (Exception e) {
-            throw new UnauthorizedException("Invalid access token");
+            throw new UnauthorizedException("Access token non valido");
         }
     }
 
@@ -44,7 +44,7 @@ public class JwtTools {
         return UUID.fromString(Jwts.parser().verifyWith(Keys.hmacShaKeyFor(secret.getBytes())).build()
                 .parseSignedClaims(token).getPayload().getSubject());
         } catch (IllegalArgumentException e) {
-            throw new UnauthorizedException("Invalid access token");
+            throw new UnauthorizedException("Access token non valido");
         }
     }
 
@@ -59,6 +59,17 @@ public class JwtTools {
         String token = req.getHeader("Authorization").split(" ")[1];
         UUID tokenUserId = extractUserIdFromToken(token);
         return tokenUserId.equals(userId);
+    }
+
+    public UUID extractUserIdFromReq() throws UnauthorizedException {
+        RequestAttributes requestAttributes = RequestContextHolder.getRequestAttributes();
+        HttpServletRequest req;
+        if (requestAttributes instanceof ServletRequestAttributes) {
+            req = ((ServletRequestAttributes)requestAttributes).getRequest();
+        } else
+            throw new UnauthorizedException("Access token non valido");
+        String token = req.getHeader("Authorization").split(" ")[1];
+        return extractUserIdFromToken(token);
     }
 
 
