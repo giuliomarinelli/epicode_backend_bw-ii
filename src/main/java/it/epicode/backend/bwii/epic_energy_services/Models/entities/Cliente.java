@@ -66,10 +66,6 @@ public class Cliente {
     private Indirizzo sedeOperativa;
 
     @Transient
-<<<<<<< HEAD
-    private String indirizzoSedeOperativa = sedeOperativa.toString();
-
-=======
     private String indirizzoSedeOperativa;
 
     public void setIndirizzoSedeLegaleAndSedeOperativa() {
@@ -78,5 +74,4 @@ public class Cliente {
         if (indirizzoSedeOperativa != null)
             indirizzoSedeOperativa = sedeOperativa.toString();
     }
->>>>>>> 9f008a2e9e50f5ca90ba505974e9c334453a1a50
 }
