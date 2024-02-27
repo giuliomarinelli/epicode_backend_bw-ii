@@ -9,13 +9,15 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+
 @RestController
 public class Provincecontroller {
     @Autowired
-   private ProvinciaRepository provinciaRepository;
+    private ProvinciaRepository provinciaRepository;
+
     @GetMapping("/province")
-    public List<Provincia> getAllProvincia(@PathVariable String sigla) {
-      return    provinciaRepository.findAll();
+    public List<Provincia> getAllProvincia() {
+        return provinciaRepository.findAllOrderByNomeAsc();
     }
 
 }

@@ -1,5 +1,6 @@
 package it.epicode.backend.bwii.epic_energy_services.Models.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -20,6 +21,7 @@ public class Provincia {
 
     private String regione;
 
+    @JsonIgnore
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "provincia")
     private List<Comune> comuni = new ArrayList<>();
 

@@ -1,5 +1,6 @@
 package it.epicode.backend.bwii.epic_energy_services.Models.entities;
 
+import it.epicode.backend.bwii.epic_energy_services.Models.enums.StatoFattura;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -21,6 +22,8 @@ public class Fattura {
     private LocalDate data;
 
     private double importo;
+
+    private StatoFattura stato;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "cliente_id", nullable = false)
