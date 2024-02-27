@@ -13,18 +13,18 @@ public class HandlerException {
 
     @ExceptionHandler(NotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    public ErrorResponse notFoundExceptionHandler(NotFoundException e){
-        return new ErrorResponse(HttpStatus.NOT_FOUND,"richiesta non trovata",e.getMessage());
+    public ErrorResponse notFoundExceptionHandler(NotFoundException e) {
+        return new ErrorResponse(HttpStatus.NOT_FOUND, "Not found", e.getMessage());
     }
 
-        @ExceptionHandler(Exception.class)
-        @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-        public ErrorResponse handlerException(Exception e){
-            return new ErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR, "Internal Server Error", e.getMessage());
-        }
+    @ExceptionHandler(Exception.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    public ErrorResponse handlerException(Exception e) {
+        return new ErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR, "Internal Server Error", e.getMessage());
+    }
 
 
-    public static void exception (BindingResult bindingResult) throws BadRequestException {
+    public static void exception(BindingResult bindingResult) throws BadRequestException {
         if (bindingResult.hasErrors()) {
             throw new BadRequestException(bindingResult.getAllErrors()
                     .stream()
