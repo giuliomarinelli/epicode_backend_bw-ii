@@ -85,4 +85,8 @@ public class ClienteService {
         Cliente c = getById(id);
         clienteRp.delete(c);
     }
+
+    
+
+
 }
