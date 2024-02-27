@@ -8,9 +8,12 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.validation.constraints.*;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import java.time.LocalDate;
 import java.util.List;
+
 
 public record ClienteDTO (
         @NotBlank(message = "Il campo ragione sociale non può essere vuoto/null")
