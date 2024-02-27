@@ -33,5 +33,14 @@ public class HandlerException {
                     .toString());
         }
     }
+    public static void notFoundException(BindingResult bindingResult) throws NotFoundException {
+        if (bindingResult.hasErrors()) {
+            throw new NotFoundException(bindingResult.getAllErrors()
+                    .stream()
+                    .map(DefaultMessageSourceResolvable::getDefaultMessage)
+                    .toList()
+                    .toString());
+        }
+    }
 
 }

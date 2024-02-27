@@ -1,4 +1,4 @@
-package it.epicode.backend.bwii.epic_energy_services.security;
+package it.epicode.backend.bwii.epic_energy_services.Security;
 
 
 
@@ -16,6 +16,8 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import it.epicode.backend.bwii.epic_energy_services.security.JwtTools;
+import it.epicode.backend.bwii.epic_energy_services.security.JwtFilter;
 
 import java.util.Arrays;
 

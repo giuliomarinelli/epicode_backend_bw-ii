@@ -1,5 +1,6 @@
 package it.epicode.backend.bwii.epic_energy_services.Services;
 
+import it.epicode.backend.bwii.epic_energy_services.Exceptions.NotFoundException;
 import it.epicode.backend.bwii.epic_energy_services.Models.RequestDTO.ClienteDTO;
 import it.epicode.backend.bwii.epic_energy_services.Models.entities.Cliente;
 import it.epicode.backend.bwii.epic_energy_services.Models.entities.Indirizzo;
@@ -28,12 +29,12 @@ public class ClienteService {
         return clienteRp.findAll(pageable);
     }
 
-    public Cliente getById(UUID id)throws BadRequestException{
+    public Cliente getById(UUID id)throws NotFoundException {
         return clienteRp.findById(id)
-                .orElseThrow(()-> new BadRequestException("Il cliente con id"+id+"è inesistente"));
+                .orElseThrow(()-> new NotFoundException("Il cliente con id"+id+"è inesistente"));
     }
 
-    public Cliente save(ClienteDTO cliente)throws BadRequestException{
+    public Cliente save(ClienteDTO cliente){
         Cliente c = new Cliente();
         c.setRagioneSociale(cliente.ragioneSociale());
         c.setPartitaIva(cliente.partitaIva());
@@ -58,7 +59,7 @@ public class ClienteService {
 
         return clienteRp.save(c);
     }
-    public Cliente update(UUID id, ClienteDTO cliente)throws BadRequestException{
+    public Cliente update(UUID id, ClienteDTO cliente)throws NotFoundException{
         Cliente c = getById(id);
         c.setRagioneSociale(cliente.ragioneSociale());
         c.setPartitaIva(cliente.partitaIva());
@@ -80,7 +81,7 @@ public class ClienteService {
         );
         return clienteRp.save(c);
     }
-    public void delete(UUID id)throws BadRequestException{
+    public void delete(UUID id)throws NotFoundException{
         Cliente c = getById(id);
         clienteRp.delete(c);
     }
