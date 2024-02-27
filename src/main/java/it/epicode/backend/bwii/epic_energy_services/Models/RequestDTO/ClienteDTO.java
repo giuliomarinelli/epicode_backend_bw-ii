@@ -43,8 +43,6 @@ public record ClienteDTO (
         @NotNull(message = "Il campo telefono contatto non può essere null")
         @Pattern(regexp = "^((00|\\+)39[\\. ]??)??3\\d{2}[\\. ]??\\d{6,7}$", message = "formato non valido")
         Long telefonoContatto,
-        @NotBlank(message = "Il campo logo aziendale non può essere vuoto/null")
-        String logoAziendale,
         @NotBlank(message = "Il campo tipo cliente non può essere vuoto/null")
         String tipoCliente,
         @NotBlank(message = "Il campo sede legale non può essere vuoto/null")
