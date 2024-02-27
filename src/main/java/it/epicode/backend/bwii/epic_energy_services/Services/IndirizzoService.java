@@ -6,6 +6,7 @@ import it.epicode.backend.bwii.epic_energy_services.Models.entities.Comune;
 import it.epicode.backend.bwii.epic_energy_services.Models.entities.Indirizzo;
 import it.epicode.backend.bwii.epic_energy_services.Models.entities.Utente;
 import it.epicode.backend.bwii.epic_energy_services.repositories.IndirizzoRepository;
+import org.apache.coyote.BadRequestException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -30,9 +31,9 @@ public class IndirizzoService {
         Indirizzo indirizzo =new Indirizzo(indirizzoDTO.via(),indirizzoDTO.civico(),indirizzoDTO.localita(),indirizzoDTO.cap(),indirizzoDTO.comune(),indirizzoDTO.cliente());
     return  indirizzoRepository.save(indirizzo);
     }
-    public  Indirizzo updateAddress(UUID id, IndirizzoDTO indirizzoDTO){
+    public  Indirizzo updateAddress(UUID id, IndirizzoDTO indirizzoDTO) throws NotFoundException, BadRequestException {
         Indirizzo indirizzo=getAdressForId(id);
-        Utente utente= utenteService.getUtenteById(id);
+        Utente utente= utenteService.getById(id);
         //Comune comune= comuneService.getComuneById(id);
         indirizzo.setComune(indirizzoDTO.comune());
         indirizzo.setCap(indirizzoDTO.cap());
