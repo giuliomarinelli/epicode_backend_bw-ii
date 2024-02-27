@@ -1,4 +1,4 @@
-package it.epicode.backend.bwii.epic_energy_services.Controllers;
+package it.epicode.backend.bwii.epic_energy_services.controllers;
 
 import it.epicode.backend.bwii.epic_energy_services.Exceptions.HandlerException;
 import it.epicode.backend.bwii.epic_energy_services.Exceptions.NotFoundException;
