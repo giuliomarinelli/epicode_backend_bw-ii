@@ -32,4 +32,11 @@ public class Indirizzo {
     @JoinColumn(name = "cliente_id")
     private Cliente cliente;
 
+    @Override
+    public String toString() {
+        String loc = localita;
+        if (localita == null) loc = "";
+        return via + " " + civico + " ( " + loc + "), " + cap + " " + comune +
+                " (" + comune.getProvincia().getSigla() + "), " + comune.getProvincia().getRegione();
+    }
 }

@@ -23,8 +23,10 @@ public class Cliente {
 
     private String ragioneSociale;
 
+    @Column(unique = true)
     private long partitaIva;
 
+    @Column(unique = true)
     private String email;
 
     private LocalDate dataInserimento;
