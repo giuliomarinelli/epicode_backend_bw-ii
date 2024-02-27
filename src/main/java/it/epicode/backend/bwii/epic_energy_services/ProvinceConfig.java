@@ -15,8 +15,8 @@ import java.io.IOException;
 import java.nio.charset.Charset;
 
 
-@Component
-@Order(1)
+//@Component
+//@Order(1)
 public class ProvinceConfig implements CommandLineRunner {
     public static final Logger logger = LoggerFactory.getLogger(ProvinceConfig.class);
 

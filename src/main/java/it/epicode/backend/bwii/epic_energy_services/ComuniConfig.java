@@ -15,8 +15,8 @@ import org.springframework.stereotype.Component;
 import java.io.File;
 import java.nio.charset.StandardCharsets;
 
-@Component
-@Order(2)
+//@Component
+//@Order(2)
 public class ComuniConfig implements CommandLineRunner {
 
     public static final Logger logger = LoggerFactory.getLogger(ComuniConfig.class);
