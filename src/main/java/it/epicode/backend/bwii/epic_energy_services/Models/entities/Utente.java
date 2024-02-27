@@ -28,6 +28,7 @@ public class Utente implements UserDetails {
     @Setter(AccessLevel.NONE)
     private UUID id;
 
+    @Column(unique = true)
     private String username;
 
     @Column(unique = true)
