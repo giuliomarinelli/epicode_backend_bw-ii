@@ -17,5 +17,4 @@ public interface UtenteRepository extends JpaRepository<Utente, UUID> {
 
     public Optional<Utente> findByUsername(String username);
 
-
 }
