@@ -1,16 +1,9 @@
 package it.epicode.backend.bwii.epic_energy_services.Models.RequestDTO;
 
-import it.epicode.backend.bwii.epic_energy_services.Models.entities.Fattura;
-import it.epicode.backend.bwii.epic_energy_services.Models.entities.Indirizzo;
-import it.epicode.backend.bwii.epic_energy_services.Models.enums.TipoCliente;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.OneToOne;
+
 import jakarta.validation.constraints.*;
 
-import java.time.LocalDate;
-import java.util.List;
+
 
 public record ClienteDTO (
         @NotBlank(message = "Il campo ragione sociale non può essere vuoto/null")

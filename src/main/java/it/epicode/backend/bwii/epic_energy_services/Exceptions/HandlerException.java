@@ -18,9 +18,9 @@ public class HandlerException {
         }
 
 
-    public static void exception (BindingResult bindingResult) throws Exception {
+    public static void exception (BindingResult bindingResult) throws BadRequestException {
         if (bindingResult.hasErrors()) {
-            throw new Exception(bindingResult.getAllErrors()
+            throw new BadRequestException(bindingResult.getAllErrors()
                     .stream()
                     .map(DefaultMessageSourceResolvable::getDefaultMessage)
                     .toList()
