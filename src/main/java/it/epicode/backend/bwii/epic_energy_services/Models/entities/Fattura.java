@@ -27,10 +27,11 @@ public class Fattura {
     private Cliente cliente;
 
     @Transient
-    private UUID clienteId = cliente.getId();
+    private UUID clienteId;
 
     public void setClienteId() {
-        clienteId = cliente.getId();
+        if (cliente.getId() != null)
+            clienteId = cliente.getId();
     }
 
     public Fattura(LocalDate data, double importo, Cliente cliente) {
