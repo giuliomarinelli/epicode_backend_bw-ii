@@ -24,20 +24,21 @@ public interface ClienteRepository extends JpaRepository<Cliente, UUID>, PagingA
     @Query("SELECT c FROM Cliente c WHERE c.sedeLegale.comune.provincia.sigla = :siglaProvincia")
     Page<Cliente> findByIndirizzoSedeLegaleProvincia(String siglaProvincia, Pageable pageable);
 
-//    Page<Cliente> findByFatturatoAnnualeBetween(
-//            double minFatturato, double maxFatturato, Pageable pageable
-//    );
-//
-//    Page<Cliente> findByDataInserimentoBetween(
-//            LocalDate startDate, LocalDate endDate, Pageable pageable
-//    );
-//
-//    Page<Cliente> findByDataUltimoContattoBetween(
-//            LocalDate startDate, LocalDate endDate, Pageable pageable
-//    );
-//
-//    Page<Cliente> findByNomeContattoContainingIgnoreCase(
-//            String nomeContatto, Pageable pageable
-//    );
+    @Query("SELECT c FROM Cliente c WHERE c.fatturatoAnnuale BETWEEN :minFatturato AND :maxFatturato")
+    Page<Cliente> findByFatturatoAnnualeBetween(
+            double minFatturato, double maxFatturato, Pageable pageable
+    );
+    @Query("SELECT c FROM Cliente c WHERE c.dataInserimento BETWEEN :startDate AND :endDate")
+    Page<Cliente> findByDataInserimentoBetween(
+            LocalDate startDate, LocalDate endDate, Pageable pageable
+    );
+    @Query("SELECT c FROM Cliente c WHERE c.dataUltimoContatto BETWEEN :startDate AND :endDate")
+    Page<Cliente> findByDataUltimoContattoBetween(
+            LocalDate startDate, LocalDate endDate, Pageable pageable
+    );
+    @Query("SELECT c FROM Cliente c WHERE LOWER(c.nomeContatto) LIKE LOWER(CONCAT('%', :nomeContatto, '%'))")
+    Page<Cliente> findByNomeContattoContainingIgnoreCase(
+            String nomeContatto, Pageable pageable
+    );
 
 }
