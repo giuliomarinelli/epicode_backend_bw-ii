@@ -3,10 +3,7 @@ package it.epicode.backend.bwii.epic_energy_services.Models.entities;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import it.epicode.backend.bwii.epic_energy_services.Models.enums.TipoCliente;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -14,6 +11,7 @@ import java.util.UUID;
 
 @Entity
 @NoArgsConstructor
+@AllArgsConstructor
 @Data
 @Table(name = "clienti")
 public class Cliente {
@@ -69,7 +67,5 @@ public class Cliente {
 
     @Transient
     private String indirizzoSedeOperativa = sedeOperativa.toString();
-
-
 
 }
