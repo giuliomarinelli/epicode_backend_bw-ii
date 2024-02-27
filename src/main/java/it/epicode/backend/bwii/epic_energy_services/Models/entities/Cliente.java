@@ -59,13 +59,24 @@ public class Cliente {
     private Indirizzo sedeLegale;
 
     @Transient
-    private String indirizzoSedeLegale = sedeLegale.toString();
+    private String indirizzoSedeLegale;
 
     @JsonIgnore
     @OneToOne(mappedBy = "cliente")
     private Indirizzo sedeOperativa;
 
     @Transient
+<<<<<<< HEAD
     private String indirizzoSedeOperativa = sedeOperativa.toString();
 
+=======
+    private String indirizzoSedeOperativa;
+
+    public void setIndirizzoSedeLegaleAndSedeOperativa() {
+        if (sedeLegale != null)
+            indirizzoSedeLegale = sedeLegale.toString();
+        if (indirizzoSedeOperativa != null)
+            indirizzoSedeOperativa = sedeOperativa.toString();
+    }
+>>>>>>> 9f008a2e9e50f5ca90ba505974e9c334453a1a50
 }

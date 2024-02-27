@@ -27,5 +27,10 @@ public class Fattura {
     private Cliente cliente;
 
     @Transient
-    private UUID idCliente = cliente.getId();
+    private UUID clienteId;
+
+    public void setClienteId() {
+        if (cliente.getId() != null)
+            clienteId = cliente.getId();
+    }
 }
