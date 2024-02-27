@@ -13,11 +13,11 @@ import it.epicode.backend.bwii.epic_energy_services.Models.entities.Cliente;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-
+import org.springframework.stereotype.Repository;
 
 
 import java.time.LocalDate;
-
+@Repository
 public interface FatturaRepository extends JpaRepository<Fattura, Integer>, PagingAndSortingRepository<Fattura, Integer> {
 
     Page<Fattura> findByClienteOrderByDataAsc       (Cliente cliente, Pageable pageable);
