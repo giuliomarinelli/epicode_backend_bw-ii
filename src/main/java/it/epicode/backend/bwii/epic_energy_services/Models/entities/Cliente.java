@@ -1,5 +1,6 @@
 package it.epicode.backend.bwii.epic_energy_services.Models.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import it.epicode.backend.bwii.epic_energy_services.Models.enums.TipoCliente;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -55,12 +56,22 @@ public class Cliente {
     @Enumerated(EnumType.STRING)
     private TipoCliente tipoCliente;
 
+    @JsonIgnore
     @OneToOne(mappedBy = "cliente")
     private Indirizzo sedeLegale;
 
+    @Transient
+    private String indirizzoSedeLegale = sedeLegale.toString();
+
+    @JsonIgnore
     @OneToOne(mappedBy = "cliente")
     private Indirizzo sedeOperativa;
 
+    @Transient
+    private String indirizzoSedeOperativa = sedeOperativa.toString();
 
-
+    public void setIndirizzoSedeLegaleAndSedeOperativa() {
+        indirizzoSedeLegale = sedeLegale.toString();
+        indirizzoSedeOperativa = sedeOperativa.toString();
+    }
 }
