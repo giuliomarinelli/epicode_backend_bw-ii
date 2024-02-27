@@ -70,6 +70,8 @@ public class Cliente {
     @Transient
     private String indirizzoSedeOperativa = sedeOperativa.toString();
 
-
-
+    public void setIndirizzoSedeLegaleAndSedeOperativa() {
+        indirizzoSedeLegale = sedeLegale.toString();
+        indirizzoSedeOperativa = sedeOperativa.toString();
+    }
 }
