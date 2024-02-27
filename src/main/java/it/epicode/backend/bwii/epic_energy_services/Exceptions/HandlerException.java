@@ -17,6 +17,24 @@ public class HandlerException {
         return new ErrorResponse(HttpStatus.NOT_FOUND, "Not found", e.getMessage());
     }
 
+    @ExceptionHandler(BadRequestException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ErrorResponse badRequestHandler(BadRequestException e) {
+        return new ErrorResponse(HttpStatus.BAD_REQUEST, "Bad request", e.getMessage());
+    }
+
+    @ExceptionHandler(InternalServerErrorException.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    public ErrorResponse badRequestHandler(InternalServerErrorException e) {
+        return handlerException(e);
+    }
+
+    @ExceptionHandler(UnauthorizedException.class)
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    public ErrorResponse notFoundHandler(UnauthorizedException e) {
+        return new ErrorResponse(HttpStatus.UNAUTHORIZED, "Unauthorized", e.getMessage());
+    }
+
     @ExceptionHandler(Exception.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public ErrorResponse handlerException(Exception e) {
