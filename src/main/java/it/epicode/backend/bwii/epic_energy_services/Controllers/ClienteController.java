@@ -23,7 +23,6 @@ public class ClienteController {
         private ClienteService clienteSv;
 
     @GetMapping("")
-    @PreAuthorize("hasAuthority('USER,ADMIN')")
     public Page<Cliente> getAllCLiente(Pageable pageable){
         return clienteSv.getAll(pageable);
     }
@@ -32,6 +31,7 @@ public class ClienteController {
         return clienteSv.getById(id);
     }
     @PostMapping("/save")
+    @PreAuthorize("hasAuthority('ADMIN')")
     public Cliente saveCliente(@RequestBody ClienteDTO cliente, BindingResult bindingResult) throws NotFoundException {
         HandlerException.notFoundException(bindingResult);
         return clienteSv.save(cliente);
