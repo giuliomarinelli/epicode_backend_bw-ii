@@ -32,4 +32,11 @@ public class Fattura {
     public void setClienteId() {
         clienteId = cliente.getId();
     }
+
+    public Fattura(LocalDate data, double importo, Cliente cliente) {
+        this.data = data;
+        this.importo = importo;
+        this.cliente = cliente;
+
+    }
 }

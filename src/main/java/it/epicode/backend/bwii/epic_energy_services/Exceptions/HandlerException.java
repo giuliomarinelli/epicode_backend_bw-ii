@@ -11,6 +11,12 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @RestControllerAdvice
 public class HandlerException {
 
+    @ExceptionHandler(NotFoundException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ErrorResponse notFoundExceptionHandler(NotFoundException e){
+        return new ErrorResponse(HttpStatus.NOT_FOUND,"richiesta non trovata",e.getMessage());
+    }
+
         @ExceptionHandler(Exception.class)
         @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
         public ErrorResponse handlerException(Exception e){
