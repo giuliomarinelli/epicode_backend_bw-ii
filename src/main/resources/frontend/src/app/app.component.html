@@ -1,9 +1,13 @@
 <nav class="navbar bg-dark border-bottom border-body navbar-expand-md" data-bs-theme="dark">
   <div class="container-md">
-    <a class="navbar-brand me-5" href="#">Logo</a>
+    <div class="logo-container">
+      <a class="navbar-brand me-5" routerLink="/" title="Epic Energy Services">
+        <img src="/assets/logo.png" alt="Logo Epic Energy Services">
+      </a>
+    </div>
     <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
       <div class="navbar-nav">
-        <a class="nav-link active" aria-current="page" href="#">Registrati</a>
+        <a class="nav-link active" aria-current="page" href="#" (click)="register()">Registrati</a>
         <a class="nav-link" href="#">Documentazione</a>
       </div>
     </div>
