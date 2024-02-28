@@ -48,6 +48,8 @@ public class ClienteService {
         return clienteRp.findAll(pageable).map(c -> {
             c.getSede().getFirst().setNomeComune(c.getSede().getFirst().getComune().getNome());
             c.getSede().get(1).setNomeComune(c.getSede().getFirst().getComune().getNome());
+            c.getSede().getFirst().setSiglaProvincia(c.getSede().getFirst().getComune().getProvincia().getSigla());
+            c.getSede().get(1).setSiglaProvincia(c.getSede().get(1).getComune().getProvincia().getSigla());
             return c;
         });
 
@@ -58,6 +60,8 @@ public class ClienteService {
                 .orElseThrow(() -> new NotFoundException("Il cliente con id " + id + " è inesistente"));
         c.getSede().getFirst().setNomeComune(c.getSede().getFirst().getComune().getNome());
         c.getSede().get(1).setNomeComune(c.getSede().getFirst().getComune().getNome());
+        c.getSede().getFirst().setSiglaProvincia(c.getSede().getFirst().getComune().getProvincia().getSigla());
+        c.getSede().get(1).setSiglaProvincia(c.getSede().get(1).getComune().getProvincia().getSigla());
         return c;
     }
 
@@ -65,6 +69,8 @@ public class ClienteService {
         cliente.setLogoAziendale(url);
         cliente.getSede().getFirst().setNomeComune(cliente.getSede().getFirst().getComune().getNome());
         cliente.getSede().get(1).setNomeComune(cliente.getSede().getFirst().getComune().getNome());
+        cliente.getSede().getFirst().setSiglaProvincia(cliente.getSede().getFirst().getComune().getProvincia().getSigla());
+        cliente.getSede().get(1).setSiglaProvincia(cliente.getSede().get(1).getComune().getProvincia().getSigla());
         return clienteRp.save(cliente);
     }
 
@@ -84,6 +90,8 @@ public class ClienteService {
         c.setTelefonoContatto(cliente.telefonoContatto());
         c.getSede().getFirst().setNomeComune(c.getSede().getFirst().getComune().getNome());
         c.getSede().get(1).setNomeComune(c.getSede().getFirst().getComune().getNome());
+        c.getSede().getFirst().setSiglaProvincia(c.getSede().getFirst().getComune().getProvincia().getSigla());
+        c.getSede().get(1).setSiglaProvincia(c.getSede().get(1).getComune().getProvincia().getSigla());
         logger.info("set almost complete");
         try {
             c.setTipoCliente(TipoCliente.valueOf(cliente.tipoCliente()));
@@ -149,6 +157,8 @@ public class ClienteService {
         c.setTelefonoContatto(cliente.telefonoContatto());
         c.getSede().getFirst().setNomeComune(c.getSede().getFirst().getComune().getNome());
         c.getSede().get(1).setNomeComune(c.getSede().getFirst().getComune().getNome());
+        c.getSede().getFirst().setSiglaProvincia(c.getSede().getFirst().getComune().getProvincia().getSigla());
+        c.getSede().get(1).setSiglaProvincia(c.getSede().get(1).getComune().getProvincia().getSigla());
         try {
             c.setTipoCliente(TipoCliente.valueOf(cliente.tipoCliente()));
         } catch (IllegalArgumentException e) {
@@ -186,11 +196,6 @@ public class ClienteService {
 
 
 
-        mailService.sendEmail(
-                c.getEmail(),
-                "ISCRIZIONE EFFETTUATA CON SUCCESSO",
-                "Benvenuto" + c.getNomeContatto() + ", ti diamo il benvenuto in Epic Energy Services"
-        );
 
 
         mailService.sendEmail(
