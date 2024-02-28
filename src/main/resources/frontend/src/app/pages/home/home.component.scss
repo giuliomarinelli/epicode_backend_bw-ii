@@ -1,0 +1,49 @@
+.form-signin {
+  width: 96%;
+  @media screen and (min-width: 450px) {
+    width: 400px;
+  }
+}
+
+.title {
+  font-size: 3rem;
+}
+
+.h-24 {
+  height: 24px;
+}
+
+.form-signin .form-floating:focus-within {
+  z-index: 2;
+}
+
+.form-signin input[type="text"] {
+  margin-bottom: -1px;
+  border-bottom-right-radius: 0;
+  border-bottom-left-radius: 0;
+}
+
+.form-signin input[type="password"] {
+  z-index: 5;
+  margin-bottom: 10px;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+}
+
+.invalid-form-feedback {
+  color: var(--bs-form-invalid-color);
+}
+
+.feedback {
+  font-size: 0.875rem;
+}
+
+.invalid {
+  color: var(--bs-form-invalid-color);
+}
+
+.valid {
+  color: var(--bs-form-valid-color);
+}
+
+

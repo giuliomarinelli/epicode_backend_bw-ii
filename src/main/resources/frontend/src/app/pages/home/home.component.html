@@ -1,0 +1,34 @@
+<main class="form-signin mt-3" cz-shortcut-listen="true">
+  <form class="box" [formGroup]="loginForm" (submit)="logIn()">
+    <h1 class="display-1 text-white text-center title">Login</h1>
+    <div class="form-floating mt-5">
+      <input formControlName="username" type="text"
+        [ngClass]="{ 'form-control': true, 'is-invalid': isInvalid('username'), 'is-valid': isValid('username') }"
+        id="floatingInput" placeholder="type your username..." />
+      <label for="floatingInput">Username</label>
+    </div>
+    <div class="form-floating">
+      <input formControlName="password" type="password"
+        [ngClass]="{ 'form-control': true, 'is-invalid': isInvalid('password'), 'is-valid': isValid('password') }"
+        class="form-control" id="floatingPassword" placeholder="type your password..." />
+      <label for="floatingPassword">Password</label>
+      <div class="h-24">
+        <p *ngIf="loginForm.dirty">
+          <span class="valid" *ngIf="valid">
+            Ok
+          </span>
+          <span class="invalid" *ngIf="!valid">
+            {{msg}}
+          </span>
+        </p>
+      </div>
+      <div class="mb-2">
+        <p class="m-0 text-white fs-1rem">
+          Non sei ancora registrato?
+          <a routerLink="/register">Registrati subito</a>
+        </p>
+      </div>
+    </div>
+    <button class="w-100 btn btn-lg btn-primary" type="submit">Sign in</button>
+  </form>
+</main>

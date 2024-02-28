@@ -2,11 +2,15 @@ package it.epicode.backend.bwii.epic_energy_services.Exceptions;
 
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.server.MethodNotAllowedException;
 
 @RestControllerAdvice
 public class HandlerException {
@@ -40,7 +44,17 @@ public class HandlerException {
     public ErrorResponse handlerException(Exception e) {
         return new ErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR, "Internal Server Error", e.getMessage());
     }
-
+    @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
+    @ResponseStatus(HttpStatus.METHOD_NOT_ALLOWED)
+    public ErrorResponse handlerException(HttpRequestMethodNotSupportedException e) {
+        return new ErrorResponse(HttpStatus.METHOD_NOT_ALLOWED, "Method not allowed", e.getMessage());
+    }
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    @ExceptionHandler(AccessDeniedException.class)
+    public ErrorResponse accessDeniedHandler(AccessDeniedException e) {
+        return new ErrorResponse(HttpStatus.UNAUTHORIZED,
+                "Unauthorized", "You don't have permissions to access this resource");
+    }
 
     public static void exception(BindingResult bindingResult) throws BadRequestException {
         if (bindingResult.hasErrors()) {

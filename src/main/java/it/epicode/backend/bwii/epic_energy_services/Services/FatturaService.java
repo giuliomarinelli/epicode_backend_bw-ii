@@ -19,28 +19,39 @@ public class FatturaService {
     @Autowired
     private FatturaRepository fatturaRepository;
     @Autowired
-    private UtenteService utenteService;
+    private ClienteService clienteSvc;
 
     public Page<Fattura> getAllFacture(Pageable pageable) {
-        return fatturaRepository.findAll(pageable);
+        return fatturaRepository.findAll(pageable).map(f -> {
+            f.setClienteId(f.getCliente().getId());
+            return f;
+        });
     }
 
     public Fattura getFactureForId(int numero) throws NotFoundException {
-        return fatturaRepository.findById(numero).orElseThrow(() -> new NotFoundException("fatttura nr :" + numero + "non trovata"));
+        Fattura fattura = fatturaRepository.findById(numero).orElseThrow(
+                () -> new NotFoundException("fatttura nr. " + numero + " non trovata")
+        );
+        fattura.setClienteId(fattura.getCliente().getId());
+        return fattura;
     }
 
     public Fattura saveFacture(FatturaDTO fatturaDTO) throws NotFoundException {
-        Fattura fattura = new Fattura(fatturaDTO.data(), fatturaDTO.importo(), fatturaDTO.cliente());
+
+        Fattura fattura = new Fattura(fatturaDTO.data(), fatturaDTO.importo(),
+                clienteSvc.getById(fatturaDTO.clienteId()), fatturaDTO.stato());
+        fattura.setClienteId(fatturaDTO.clienteId());
         return fatturaRepository.save(fattura);
     }
 
     public Fattura updateFacture(int numero, FatturaDTO fatturaDTO) throws NotFoundException, BadRequestException {
         Fattura fattura = getFactureForId(numero);
-        Utente utente = utenteService.getById(fatturaDTO.cliente().getId());
-        fattura.setCliente(fatturaDTO.cliente());
+        Cliente cliente = clienteSvc.getById(fatturaDTO.clienteId());
+        fattura.setCliente(cliente);
         fattura.setData(fatturaDTO.data());
         fattura.setImporto(fatturaDTO.importo());
-        fattura.setData(fatturaDTO.data());
+        fattura.setStato(fatturaDTO.stato());
+        fattura.setClienteId(fattura.getCliente().getId());
         return fatturaRepository.save(fattura);
     }
 
