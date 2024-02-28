@@ -10,7 +10,7 @@ import it.epicode.backend.bwii.epic_energy_services.repositories.ClienteReposito
 import it.epicode.backend.bwii.epic_energy_services.repositories.ComuneRepository;
 import it.epicode.backend.bwii.epic_energy_services.repositories.IndirizzoRepository;
 import it.epicode.backend.bwii.epic_energy_services.repositories.ProvinciaRepository;
-import org.apache.coyote.BadRequestException;
+import it.epicode.backend.bwii.epic_energy_services.Exceptions.BadRequestException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
