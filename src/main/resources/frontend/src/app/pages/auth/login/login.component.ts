@@ -2,10 +2,11 @@ import { Router } from '@angular/router';
 import { Component } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { BehaviorSubject } from 'rxjs';
-import { RoleService } from '../role.service';
+
+import { AuthService } from '../../../services/auth.service';
 
   @Component({
-    selector: 'app-login',
+    selector: '#login',
     templateUrl: './login.component.html',
     styleUrls: ['./login.component.scss']
   })
@@ -14,7 +15,17 @@ import { RoleService } from '../role.service';
     userRole$ = new BehaviorSubject<string>('');
     authSrv: any;
 
-    constructor( private roleSrv: RoleService, private router: Router){}
+    constructor( private authSvc: AuthService, private router: Router){}
+
+    // un utente può avere uno o piu ruoli, va gestita diversamente
+
+    private ruoli!: string[]
+
+    ngOnInit() {
+      this.authSvc.getAuthorities$.subscribe(res => {
+        res ? this.ruoli = res : this.ruoli = []
+      })
+    }
 
     access(form: NgForm) {
       this.isLoading = true;
@@ -34,7 +45,7 @@ import { RoleService } from '../role.service';
                 localStorage.setItem('username', username);
                 localStorage.setItem('id', id);
 
-                this.roleSrv.setUserRole(userRole);
+                // this.roleSrv.setUserRole(userRole);
                 this.userRole$.next(userRole);
 
                 if (userRole === 'ADMIN') {

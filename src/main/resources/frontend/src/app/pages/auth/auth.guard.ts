@@ -15,28 +15,28 @@ export class AuthGuard implements CanActivate {
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot
   ): Observable<boolean> {
-    return this.authSrv.getUserDetails().pipe(
-      map(userDetails => {
-        const userRole = userDetails?.ruolo?.nome;
-        const expectedRole = route.data['expectedRole'];
+    // return this.authSrv.getUserDetails().pipe(
+    //   map(userDetails => {
+    //     // const userRole = userDetails?.ruolo?.nome;
+    //     const expectedRole = route.data['expectedRole'];
 
-        if (!userRole) {
-          this.router.navigate(['/access-denied']); // Utente non autenticato
-          return false;
-        }
+      //   if (!userRole) {
+      //     this.router.navigate(['/access-denied']); // Utente non autenticato
+      //     return false;
+      //   }
 
-        if (expectedRole && userRole !== expectedRole) {
-          this.router.navigate(['/access-denied']); // Ruolo non autorizzato
-          return false;
-        }
+      //   if (expectedRole && userRole !== expectedRole) {
+      //     this.router.navigate(['/access-denied']); // Ruolo non autorizzato
+      //     return false;
+      //   }
 
-        return true;
-      }),
-      catchError(error => {
-        console.error('Errore nel recuperare i dettagli dell\'utente:', error);
-        this.router.navigate(['/access-denied']); // Errore nel recupero dei dettagli
-        return [false];
-      })
-    );
+      //   return true;
+      // }),
+      // catchError(error => {
+      //   console.error('Errore nel recuperare i dettagli dell\'utente:', error);
+      //   this.router.navigate(['/access-denied']); // Errore nel recupero dei dettagli
+      //   return [false];
+      // })
+    // );
   }
 }

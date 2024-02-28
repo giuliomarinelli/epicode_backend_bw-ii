@@ -7,10 +7,14 @@
     </div>
     <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
       <div class="navbar-nav">
-        <a class="nav-link active" aria-current="page" href="#" (click)="register()">Registrati</a>
+        <a class="nav-link active" aria-current="page" routerLink="/register">Registrati</a>
         <a class="nav-link" href="#">Documentazione</a>
       </div>
     </div>
   </div>
 </nav>
 <router-outlet></router-outlet>
+
+<!-- @if(isBrowserOnly) {
+<div id="viewport-loader"></div>
+} -->

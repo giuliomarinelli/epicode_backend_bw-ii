@@ -1,10 +1,11 @@
 import { UtenteDTO, iUtente } from './Models/i-utente';
-import { Component } from '@angular/core';
+import { Component, Inject, PLATFORM_ID } from '@angular/core';
 import { Router, RoutesRecognized } from '@angular/router';
 import { AuthService } from './services/auth.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { firstValueFrom } from 'rxjs';
 import { on } from 'events';
+import { isPlatformBrowser } from '@angular/common';
 
 
 @Component({
@@ -13,19 +14,16 @@ import { on } from 'events';
   styleUrl: './app.component.scss'
 })
 export class AppComponent {
-  constructor(private router: Router, private authSvc: AuthService) { }
+  constructor(private router: Router, private authSvc: AuthService, @Inject(PLATFORM_ID) private platformId: string) { }
 
   protected isHome: boolean = true
 
-  private userDTO: UtenteDTO = {
-    nome: 'Giulio',
-    cognome: 'Marinelli',
-    email: 'mariucscddioOoOoOOOOo@rossi.it',
-    password: 'abcdefg',
-    username: 'blablasvddnxskjnask'
+  protected contentLoaded = false
 
+  get isBrowserOnly(): boolean {
+    return isPlatformBrowser(this.platformId);
   }
-  private onlyOnce = true
+
   ngOnInit() {
     this.router.events.subscribe(e => {
       if (e instanceof RoutesRecognized) {
@@ -36,6 +34,10 @@ export class AppComponent {
     })
 
 
+  }
+
+  protected setContentLoaded(event: boolean): void {
+    this.contentLoaded = event
   }
 
 

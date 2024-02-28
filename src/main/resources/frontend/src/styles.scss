@@ -26,6 +26,24 @@ body {
   &:hover {
     box-shadow: none;
     border: 2px solid $black;
-    background-color: lighten(yellow, 20%);
+    background-color: lighten($yellow-400, 20%);
   }
+}
+
+.fade-out-animation {
+  animation: .4s ease-in-out forwards fade-out;
+}
+
+@keyframes fade-out {
+  from {
+    opacity: 1;
+  }
+
+  to {
+    opacity: 0
+  }
+}
+
+.first-load-bg {
+  background-color: $gray-800;
 }
