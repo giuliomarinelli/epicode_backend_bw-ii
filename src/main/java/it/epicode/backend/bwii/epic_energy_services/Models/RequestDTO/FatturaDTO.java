@@ -10,7 +10,6 @@ import java.time.LocalDate;
 import java.util.UUID;
 
 public record FatturaDTO(
-
         @NotBlank(message = "Data fattura obbligatorio")
         LocalDate data,
         @NotBlank(message = "Importo fattura obbligatorio")

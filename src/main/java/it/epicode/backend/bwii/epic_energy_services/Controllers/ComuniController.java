@@ -1,4 +1,4 @@
-package it.epicode.backend.bwii.epic_energy_services.controllers;
+package it.epicode.backend.bwii.epic_energy_services.Controllers;
 
 import it.epicode.backend.bwii.epic_energy_services.Models.entities.Comune;
 import it.epicode.backend.bwii.epic_energy_services.repositories.ComuneRepository;
