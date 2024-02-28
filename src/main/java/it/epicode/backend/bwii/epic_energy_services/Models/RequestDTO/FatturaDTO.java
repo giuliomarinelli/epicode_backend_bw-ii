@@ -9,8 +9,7 @@ import lombok.Data;
 import java.time.LocalDate;
 
 public record FatturaDTO(
-        @NotBlank(message = "Numero fattura obbligatorio")
-        int numero,
+
         @NotBlank(message = "Data  fattura obbligatorio")
         LocalDate data,
         @NotBlank(message = "Importo fattura obbligatorio")
