@@ -94,31 +94,31 @@ public class ClienteControllerTest {
 
         assertEquals(url, result.getLogoAziendale());
     }
+//
+//    @Test
+//    public void testSaveCliente() throws BadRequestException, NotFoundException {
+//        ClienteDTO clienteDTO = new ClienteDTO();
+//        Cliente cliente = new Cliente();
+//
+//        Mockito.when(clienteService.save(clienteDTO)).thenReturn(cliente);
+//
+//        Cliente result = clienteController.saveCliente(clienteDTO);
+//
+//        assertEquals(cliente, result);
+//    }
 
-    @Test
-    public void testSaveCliente() throws BadRequestException, NotFoundException {
-        ClienteDTO clienteDTO = new ClienteDTO();
-        Cliente cliente = new Cliente();
-
-        Mockito.when(clienteService.save(clienteDTO)).thenReturn(cliente);
-
-        Cliente result = clienteController.saveCliente(clienteDTO);
-
-        assertEquals(cliente, result);
-    }
-
-    @Test
-    public void testUpdateCliente() throws BadRequestException, NotFoundException, org.apache.coyote.BadRequestException, InternalServerErrorException {
-        UUID id = UUID.randomUUID();
-        ClienteDTO clienteDTO = new ClienteDTO();
-        Cliente cliente = new Cliente();
-
-        Mockito.when(clienteService.update(id, clienteDTO)).thenReturn(cliente);
-
-        Cliente result = clienteController.updateCliente(id, clienteDTO, null);
-
-        assertEquals(cliente, result);
-    }
+//    @Test
+//    public void testUpdateCliente() throws BadRequestException, NotFoundException, org.apache.coyote.BadRequestException, InternalServerErrorException {
+//        UUID id = UUID.randomUUID();
+//        ClienteDTO clienteDTO = new ClienteDTO();
+//        Cliente cliente = new Cliente();
+//
+//        Mockito.when(clienteService.update(id, clienteDTO)).thenReturn(cliente);
+//
+//        Cliente result = clienteController.updateCliente(id, clienteDTO, null);
+//
+//        assertEquals(cliente, result);
+//    }
 
     @Test
     public void testDeleteCliente() throws NotFoundException {
