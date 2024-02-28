@@ -6,11 +6,11 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
 @Entity
-@NoArgsConstructor
 @AllArgsConstructor
 @Data
 @Table(name = "clienti")
@@ -33,7 +33,7 @@ public class Cliente {
     private LocalDate dataUltimoContatto;
 
     private double fatturatoAnnuale;
-
+    @Column(unique = true)
     private String pec;
 
     private long telefono;
@@ -48,30 +48,30 @@ public class Cliente {
 
     private String logoAziendale;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "cliente")
     private List<Fattura> fatture;
 
     @Enumerated(EnumType.STRING)
     private TipoCliente tipoCliente;
 
-    @JsonIgnore
-    @OneToOne(mappedBy = "cliente")
-    private Indirizzo sedeLegale;
 
-    @Transient
-    private String indirizzoSedeLegale;
+    @OneToMany(mappedBy = "cliente")
+    private List<Indirizzo> sede = new ArrayList<>();
 
-    @JsonIgnore
-    @OneToOne(mappedBy = "cliente")
-    private Indirizzo sedeOperativa;
 
-    @Transient
-    private String indirizzoSedeOperativa;
 
-    public void setIndirizzoSedeLegaleAndSedeOperativa() {
-        if (sedeLegale != null)
-            indirizzoSedeLegale = sedeLegale.toString();
-        if (indirizzoSedeOperativa != null)
-            indirizzoSedeOperativa = sedeOperativa.toString();
+    public Cliente() {
+        dataInserimento = LocalDate.now();
     }
+
+    @Override
+    public String toString() {
+        return "";
+    }
+
+
 }
+
+
+

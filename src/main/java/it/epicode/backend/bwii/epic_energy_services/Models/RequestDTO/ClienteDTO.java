@@ -1,6 +1,7 @@
 package it.epicode.backend.bwii.epic_energy_services.Models.RequestDTO;
 
 
+//import it.epicode.backend.bwii.epic_energy_services.Models.entities.Indirizzo;
 import jakarta.validation.constraints.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -16,9 +17,7 @@ public record ClienteDTO (
         @NotBlank(message = "Il campo email non può essere vuoto/null")
         @Email(regexp = "^[w-.]+@([w-]+.)+[w-]{2,4}$", message = "email non valida")
         String email,
-        @NotBlank(message = "Il campo data Inserimento non può essere vuoto/null")
-        @Pattern(regexp = "^\\d{4}-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])$", message = "formato data non valido")
-        String dataInserimento,
+
         @NotBlank(message = "Il campo data Ultimo Contatto non può essere vuoto/null")
         @Pattern(regexp = "^\\d{4}-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])$" , message = "formato data non valido")
         String dataUltimoContatto,
@@ -43,14 +42,12 @@ public record ClienteDTO (
         @NotNull(message = "Il campo telefono contatto non può essere null")
         @Pattern(regexp = "^((00|\\+)39[\\. ]??)??3\\d{2}[\\. ]??\\d{6,7}$", message = "formato non valido")
         Long telefonoContatto,
-        @NotBlank(message = "Il campo logo aziendale non può essere vuoto/null")
-        String logoAziendale,
         @NotBlank(message = "Il campo tipo cliente non può essere vuoto/null")
         String tipoCliente,
         @NotBlank(message = "Il campo sede legale non può essere vuoto/null")
-        String sedeLegale,
+        IndirizzoDTO sedeLegale,
         @NotBlank(message = "Il campo sede operativa non può essere vuoto/null")
-        String sedeOperativa
+        IndirizzoDTO sedeOperativa
 ){
 
 }

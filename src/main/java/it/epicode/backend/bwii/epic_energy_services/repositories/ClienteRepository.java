@@ -10,6 +10,7 @@ import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.UUID;
 
 @Repository
@@ -21,8 +22,8 @@ public interface ClienteRepository extends JpaRepository<Cliente, UUID>, PagingA
     Page<Cliente> findByDataInserimento(LocalDate dataInserimento, Pageable pageable);
 
     Page<Cliente> findByDataUltimoContatto(LocalDate dataUltimoContatto, Pageable pageable);
-    @Query("SELECT c FROM Cliente c WHERE c.sedeLegale.comune.provincia.sigla = :siglaProvincia")
-    Page<Cliente> findByIndirizzoSedeLegaleProvincia(String siglaProvincia, Pageable pageable);
+//    @Query("SELECT c FROM Cliente c WHERE c.sedeLegale.comune.provincia.sigla = :siglaProvincia")
+//    Page<Cliente> findByIndirizzoSedeLegaleProvincia(String siglaProvincia, Pageable pageable);
 
     @Query("SELECT c FROM Cliente c WHERE c.fatturatoAnnuale BETWEEN :minFatturato AND :maxFatturato")
     Page<Cliente> findByFatturatoAnnualeBetween(
@@ -40,5 +41,11 @@ public interface ClienteRepository extends JpaRepository<Cliente, UUID>, PagingA
     Page<Cliente> findByNomeContattoContainingIgnoreCase(
             String nomeContatto, Pageable pageable
     );
+
+    @Query("SELECT c.email FROM Cliente c")
+    public List<String> getAllEmails();
+
+    @Query("SELECT c.pec FROM Cliente c")
+    public List<String> getAllPecs();
 
 }

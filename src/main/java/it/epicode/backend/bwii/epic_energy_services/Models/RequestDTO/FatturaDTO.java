@@ -7,19 +7,17 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 import java.time.LocalDate;
+import java.util.UUID;
 
 public record FatturaDTO(
-        @NotBlank(message = "Numero fattura obbligatorio")
-        int numero,
-        @NotBlank(message = "Data  fattura obbligatorio")
+
+        @NotBlank(message = "Data fattura obbligatorio")
         LocalDate data,
         @NotBlank(message = "Importo fattura obbligatorio")
         double importo,
         @NotNull(message = "Stato fattura obbligatorio")
         StatoFattura stato,
 
-        @NotBlank(message = "Importo fattura obbligatorio")
-
-        Cliente cliente) {
-
-}
+        @NotBlank(message = "clienteId obbligatorio")
+        UUID clienteId
+) {}

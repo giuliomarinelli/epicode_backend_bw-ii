@@ -30,4 +30,13 @@ public class Provincia {
         this.nome = nome;
         this.regione = regione;
     }
+
+    @Override
+    public String toString() {
+        return "Provincia{" +
+                "sigla='" + sigla + '\'' +
+                ", nome='" + nome + '\'' +
+                ", regione='" + regione + '\'' +
+                '}';
+    }
 }

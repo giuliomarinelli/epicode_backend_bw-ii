@@ -32,4 +32,6 @@ public class Comune {
         this.nome = nome;
         this.provincia = provincia;
     }
+
+
 }

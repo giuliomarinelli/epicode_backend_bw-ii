@@ -1,5 +1,7 @@
 package it.epicode.backend.bwii.epic_energy_services.Models.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import it.epicode.backend.bwii.epic_energy_services.Models.enums.TipoSede;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -11,6 +13,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Indirizzo {
+    @JsonIgnore
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     @Setter(AccessLevel.NONE)
@@ -24,27 +27,38 @@ public class Indirizzo {
 
     private int cap;
 
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "comune_id", nullable = false)
     private Comune comune;
 
-    @OneToOne
+    @Transient
+    private String nomeComune;
+
+    @JsonIgnore
+    @ManyToOne
     @JoinColumn(name = "cliente_id")
     private Cliente cliente;
 
-    @Override
-    public String toString() {
-        String loc = localita;
-        if (localita == null) loc = "";
-        return via + " " + civico + " ( " + loc + "), " + cap + " " + comune +
-                " (" + comune.getProvincia().getSigla() + "), " + comune.getProvincia().getRegione();
-    }
+    @Enumerated(EnumType.STRING)
+    private TipoSede tipoSede;
 
-    public Indirizzo(String via, String civico, String localita, int cap,Comune comune,Cliente cliente){
+
+    public Indirizzo(String via, String civico, String localita, int cap, Comune comune, Cliente cliente, TipoSede tipoSede) {
         this.via = via;
         this.civico = civico;
         this.localita = localita;
         this.cap = cap;
-        this.comune=comune;
-        this.cliente=cliente;
-}}
+        this.comune = comune;
+        this.cliente = cliente;
+        this.tipoSede = tipoSede;
+    }
+
+    public String toString() {
+        String loc = localita;
+        if (localita == null) loc = "";
+        return via + " " + civico + " ( " + loc + "), " + cap + " " + comune.getNome() +
+                " (" + comune.getProvincia().getSigla() + "), " + comune.getProvincia().getRegione();
+    }
+
+}

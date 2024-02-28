@@ -1,5 +1,6 @@
 package it.epicode.backend.bwii.epic_energy_services.Models.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import it.epicode.backend.bwii.epic_energy_services.Models.enums.StatoFattura;
 import jakarta.persistence.*;
 import lombok.*;
@@ -24,7 +25,7 @@ public class Fattura {
     private double importo;
 
     private StatoFattura stato;
-
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "cliente_id", nullable = false)
     private Cliente cliente;
@@ -32,15 +33,18 @@ public class Fattura {
     @Transient
     private UUID clienteId;
 
-    public void setClienteId() {
-        if (cliente.getId() != null)
-            clienteId = cliente.getId();
-    }
 
-    public Fattura(LocalDate data, double importo, Cliente cliente) {
+
+    public Fattura(LocalDate data, double importo, Cliente cliente, StatoFattura stato) {
         this.data = data;
         this.importo = importo;
         this.cliente = cliente;
+        this.stato = stato;
 
+    }
+
+    @Override
+    public String toString() {
+        return "";
     }
 }

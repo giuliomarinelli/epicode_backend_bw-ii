@@ -43,6 +43,8 @@ public class Utente implements UserDetails {
 
     private List<Ruolo> ruolo = List.of(Ruolo.USER);
 
+
+
     public Utente(String username, String email, String password, String nome, String cognome) {
         this.username = username;
         this.email = email;
@@ -61,5 +63,10 @@ public class Utente implements UserDetails {
             authorities.add(new SimpleGrantedAuthority(r.name()));
 
         return authorities;
+    }
+
+    @Override
+    public String toString() {
+        return "";
     }
 }
