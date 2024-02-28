@@ -10,7 +10,7 @@ import it.epicode.backend.bwii.epic_energy_services.repositories.ClienteReposito
 import it.epicode.backend.bwii.epic_energy_services.repositories.ComuneRepository;
 import it.epicode.backend.bwii.epic_energy_services.repositories.IndirizzoRepository;
 import it.epicode.backend.bwii.epic_energy_services.repositories.ProvinciaRepository;
-import org.apache.coyote.BadRequestException;
+import it.epicode.backend.bwii.epic_energy_services.Exceptions.BadRequestException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,32 +45,18 @@ public class ClienteService {
     private ComuneRepository comuneRp;
 
     public Page<Cliente> getAll(Pageable pageable) {
-        return clienteRp.findAll(pageable).map(c -> {
-            c.getSede().getFirst().setNomeComune(c.getSede().getFirst().getComune().getNome());
-            c.getSede().get(1).setNomeComune(c.getSede().getFirst().getComune().getNome());
-            c.getSede().getFirst().setSiglaProvincia(c.getSede().getFirst().getComune().getProvincia().getSigla());
-            c.getSede().get(1).setSiglaProvincia(c.getSede().get(1).getComune().getProvincia().getSigla());
-            return c;
-        });
+        return clienteRp.findAll(pageable);
 
     }
 
     public Cliente getById(UUID id) throws NotFoundException {
         Cliente c = clienteRp.findById(id)
                 .orElseThrow(() -> new NotFoundException("Il cliente con id " + id + " è inesistente"));
-        c.getSede().getFirst().setNomeComune(c.getSede().getFirst().getComune().getNome());
-        c.getSede().get(1).setNomeComune(c.getSede().getFirst().getComune().getNome());
-        c.getSede().getFirst().setSiglaProvincia(c.getSede().getFirst().getComune().getProvincia().getSigla());
-        c.getSede().get(1).setSiglaProvincia(c.getSede().get(1).getComune().getProvincia().getSigla());
         return c;
     }
 
     public Cliente updateAfterUpload(Cliente cliente, String url) {
         cliente.setLogoAziendale(url);
-        cliente.getSede().getFirst().setNomeComune(cliente.getSede().getFirst().getComune().getNome());
-        cliente.getSede().get(1).setNomeComune(cliente.getSede().getFirst().getComune().getNome());
-        cliente.getSede().getFirst().setSiglaProvincia(cliente.getSede().getFirst().getComune().getProvincia().getSigla());
-        cliente.getSede().get(1).setSiglaProvincia(cliente.getSede().get(1).getComune().getProvincia().getSigla());
         return clienteRp.save(cliente);
     }
 
@@ -88,10 +74,7 @@ public class ClienteService {
         c.setNomeContatto(cliente.nomeContatto());
         c.setCognomeContatto(cliente.cognomeContatto());
         c.setTelefonoContatto(cliente.telefonoContatto());
-        c.getSede().getFirst().setNomeComune(c.getSede().getFirst().getComune().getNome());
-        c.getSede().get(1).setNomeComune(c.getSede().getFirst().getComune().getNome());
-        c.getSede().getFirst().setSiglaProvincia(c.getSede().getFirst().getComune().getProvincia().getSigla());
-        c.getSede().get(1).setSiglaProvincia(c.getSede().get(1).getComune().getProvincia().getSigla());
+
         logger.info("set almost complete");
         try {
             c.setTipoCliente(TipoCliente.valueOf(cliente.tipoCliente()));
@@ -131,7 +114,8 @@ public class ClienteService {
         indirizzoRp.save(indirizzoSedeLegale);
         indirizzoRp.save(indirizzoSedeOperativa);
 
-
+        c.getSede().add(indirizzoSedeLegale);
+        c.getSede().add(indirizzoSedeOperativa);
 
         mailService.sendEmail(
                 c.getEmail(),
@@ -155,27 +139,26 @@ public class ClienteService {
         c.setNomeContatto(cliente.nomeContatto());
         c.setCognomeContatto(cliente.cognomeContatto());
         c.setTelefonoContatto(cliente.telefonoContatto());
-        c.getSede().getFirst().setNomeComune(c.getSede().getFirst().getComune().getNome());
-        c.getSede().get(1).setNomeComune(c.getSede().getFirst().getComune().getNome());
-        c.getSede().getFirst().setSiglaProvincia(c.getSede().getFirst().getComune().getProvincia().getSigla());
-        c.getSede().get(1).setSiglaProvincia(c.getSede().get(1).getComune().getProvincia().getSigla());
+
         try {
             c.setTipoCliente(TipoCliente.valueOf(cliente.tipoCliente()));
         } catch (IllegalArgumentException e) {
             throw new BadRequestException("tipoCliente non valido, sono ammessi solo i seguenti valori esatti: " +
                     "PA, SAS, SNC, SS, SRL, SPA, SAPA, COOPERATIVA");
         }
+
+        List<Indirizzo> indirizzi = indirizzoRp.findByCliente(c);
+        indirizzoRp.deleteAll(indirizzi);
         Comune comuneSedeLegale = comuneRp.findByNomeAndProvincia(cliente.sedeLegale().nomeComune(), cliente.sedeLegale().siglaProvincia())
                 .orElseThrow(
-                        () -> new it.epicode.backend.bwii.epic_energy_services.Exceptions.BadRequestException("Comune sede legale non trovato")
+                        () -> new BadRequestException("Comune sede legale non trovato")
                 );
+        logger.info("sede legale");
 
-
-        Comune comuneSedeOperativa = comuneRp.findByNomeAndProvincia(cliente.sedeLegale().nomeComune(), cliente.sedeOperativa().siglaProvincia())
+        Comune comuneSedeOperativa = comuneRp.findByNomeAndProvincia(cliente.sedeOperativa().nomeComune(), cliente.sedeOperativa().siglaProvincia())
                 .orElseThrow(
-                        () -> new it.epicode.backend.bwii.epic_energy_services.Exceptions.BadRequestException("Comune sede operativa non trovato")
+                        () -> new BadRequestException("Comune sede operativa non trovato")
                 );
-
 
         try {
             clienteRp.save(c);
@@ -184,6 +167,9 @@ public class ClienteService {
                 throw new BadRequestException("L'email e/o la PEC inseriti sono già esistenti, impossibile aggiornare");
             throw new InternalServerErrorException("Errore di violazione dell'integrità dei dati. " + e.getMessage());
         }
+
+
+
 
         Indirizzo indirizzoSedeLegale = new Indirizzo(cliente.sedeLegale().via(), cliente.sedeLegale().civico(),
                 cliente.sedeLegale().localita(), cliente.sedeLegale().cap(), comuneSedeLegale, c, TipoSede.SEDE_LEGALE);
@@ -194,6 +180,8 @@ public class ClienteService {
         indirizzoRp.save(indirizzoSedeLegale);
         indirizzoRp.save(indirizzoSedeOperativa);
 
+        c.getSede().add(indirizzoSedeLegale);
+        c.getSede().add(indirizzoSedeOperativa);
 
 
 
