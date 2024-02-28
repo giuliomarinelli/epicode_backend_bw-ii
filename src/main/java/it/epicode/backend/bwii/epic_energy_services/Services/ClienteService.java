@@ -45,18 +45,32 @@ public class ClienteService {
     private ComuneRepository comuneRp;
 
     public Page<Cliente> getAll(Pageable pageable) {
-        return clienteRp.findAll(pageable);
+        return clienteRp.findAll(pageable).map(c -> {
+            c.getSede().getFirst().setSiglaProvincia(c.getSede().getFirst().getComune().getProvincia().getSigla());
+            c.getSede().getFirst().setNomeComune(c.getSede().getFirst().getComune().getNome());
+            c.getSede().get(1).setSiglaProvincia(c.getSede().get(1).getComune().getProvincia().getSigla());
+            c.getSede().get(1).setNomeComune(c.getSede().get(1).getComune().getNome());
+            return c;
+        });
 
     }
 
     public Cliente getById(UUID id) throws NotFoundException {
         Cliente c = clienteRp.findById(id)
                 .orElseThrow(() -> new NotFoundException("Il cliente con id " + id + " è inesistente"));
+        c.getSede().getFirst().setSiglaProvincia(c.getSede().getFirst().getComune().getProvincia().getSigla());
+        c.getSede().getFirst().setNomeComune(c.getSede().getFirst().getComune().getNome());
+        c.getSede().get(1).setSiglaProvincia(c.getSede().get(1).getComune().getProvincia().getSigla());
+        c.getSede().get(1).setNomeComune(c.getSede().get(1).getComune().getNome());
         return c;
     }
 
     public Cliente updateAfterUpload(Cliente cliente, String url) {
         cliente.setLogoAziendale(url);
+        cliente.getSede().getFirst().setSiglaProvincia(cliente.getSede().getFirst().getComune().getProvincia().getSigla());
+        cliente.getSede().getFirst().setNomeComune(cliente.getSede().getFirst().getComune().getNome());
+        cliente.getSede().get(1).setSiglaProvincia(cliente.getSede().get(1).getComune().getProvincia().getSigla());
+        cliente.getSede().get(1).setNomeComune(cliente.getSede().get(1).getComune().getNome());
         return clienteRp.save(cliente);
     }
 
@@ -94,6 +108,8 @@ public class ClienteService {
                 .orElseThrow(
                         () -> new BadRequestException("Comune sede operativa non trovato")
                 );
+        System.out.println(comuneSedeLegale);
+        System.out.println(comuneSedeOperativa);
         try {
             logger.info("trying to save");
             clienteRp.save(c);
@@ -111,8 +127,15 @@ public class ClienteService {
         Indirizzo indirizzoSedeOperativa = new Indirizzo(cliente.sedeOperativa().via(), cliente.sedeOperativa().civico(),
                 cliente.sedeOperativa().localita(), cliente.sedeOperativa().cap(), comuneSedeOperativa, c, TipoSede.SEDE_OPERATIVA);
         logger.info("indirizzi");
+
         indirizzoRp.save(indirizzoSedeLegale);
         indirizzoRp.save(indirizzoSedeOperativa);
+
+        indirizzoSedeLegale.setNomeComune(cliente.sedeLegale().nomeComune());
+        indirizzoSedeLegale.setSiglaProvincia(cliente.sedeLegale().siglaProvincia());
+        indirizzoSedeOperativa.setNomeComune(cliente.sedeOperativa().nomeComune());
+        indirizzoSedeOperativa.setSiglaProvincia(cliente.sedeOperativa().siglaProvincia());
+
 
         c.getSede().add(indirizzoSedeLegale);
         c.getSede().add(indirizzoSedeOperativa);
@@ -124,6 +147,16 @@ public class ClienteService {
         );
 
         return c;
+    }
+
+    private void updateAddress(Indirizzo i, String via, String civico, String localita, int cap, Comune comune) {
+        i.setVia(via);
+        i.setCivico(civico);
+        i.setLocalita(localita);
+        i.setCap(cap);
+        i.setComune(comune);
+        i.setNomeComune(i.getComune().getNome());
+        i.setSiglaProvincia(i.getComune().getProvincia().getSigla());
     }
 
     public Cliente update(UUID id, ClienteDTO cliente) throws NotFoundException, BadRequestException, InternalServerErrorException, it.epicode.backend.bwii.epic_energy_services.Exceptions.BadRequestException {
@@ -147,41 +180,26 @@ public class ClienteService {
                     "PA, SAS, SNC, SS, SRL, SPA, SAPA, COOPERATIVA");
         }
 
-        List<Indirizzo> indirizzi = indirizzoRp.findByCliente(c);
-        indirizzoRp.deleteAll(indirizzi);
         Comune comuneSedeLegale = comuneRp.findByNomeAndProvincia(cliente.sedeLegale().nomeComune(), cliente.sedeLegale().siglaProvincia())
                 .orElseThrow(
                         () -> new BadRequestException("Comune sede legale non trovato")
                 );
-        logger.info("sede legale");
+
 
         Comune comuneSedeOperativa = comuneRp.findByNomeAndProvincia(cliente.sedeOperativa().nomeComune(), cliente.sedeOperativa().siglaProvincia())
                 .orElseThrow(
                         () -> new BadRequestException("Comune sede operativa non trovato")
                 );
 
-        try {
-            clienteRp.save(c);
-        } catch (DataIntegrityViolationException e) {
-            if (clienteRp.getAllEmails().contains(c.getEmail()) || clienteRp.getAllPecs().contains(c.getPec()))
-                throw new BadRequestException("L'email e/o la PEC inseriti sono già esistenti, impossibile aggiornare");
-            throw new InternalServerErrorException("Errore di violazione dell'integrità dei dati. " + e.getMessage());
-        }
-
-
-
-
-        Indirizzo indirizzoSedeLegale = new Indirizzo(cliente.sedeLegale().via(), cliente.sedeLegale().civico(),
-                cliente.sedeLegale().localita(), cliente.sedeLegale().cap(), comuneSedeLegale, c, TipoSede.SEDE_LEGALE);
-
-        Indirizzo indirizzoSedeOperativa = new Indirizzo(cliente.sedeOperativa().via(), cliente.sedeOperativa().civico(),
-                cliente.sedeOperativa().localita(), cliente.sedeOperativa().cap(), comuneSedeOperativa, c, TipoSede.SEDE_OPERATIVA);
-
-        indirizzoRp.save(indirizzoSedeLegale);
-        indirizzoRp.save(indirizzoSedeOperativa);
-
-        c.getSede().add(indirizzoSedeLegale);
-        c.getSede().add(indirizzoSedeOperativa);
+        indirizzoRp.saveAll(indirizzoRp.findByCliente(c).stream().peek(i -> {
+            switch (i.getTipoSede()) {
+                case TipoSede.SEDE_LEGALE -> updateAddress(i, cliente.sedeLegale().via(), cliente.sedeLegale().civico(),
+                        cliente.sedeLegale().localita(), cliente.sedeLegale().cap(), comuneSedeLegale);
+                case TipoSede.SEDE_OPERATIVA ->
+                        updateAddress(i, cliente.sedeOperativa().via(), cliente.sedeOperativa().civico(),
+                                cliente.sedeOperativa().localita(), cliente.sedeLegale().cap(), comuneSedeOperativa);
+            }
+        }).toList());
 
 
 
