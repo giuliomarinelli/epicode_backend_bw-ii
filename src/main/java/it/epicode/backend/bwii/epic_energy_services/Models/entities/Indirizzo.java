@@ -5,6 +5,7 @@ import it.epicode.backend.bwii.epic_energy_services.Models.enums.TipoSede;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.Objects;
 import java.util.UUID;
 
 @Entity
@@ -35,6 +36,9 @@ public class Indirizzo {
     @Transient
     private String nomeComune;
 
+    @Transient
+    private String siglaProvincia;
+
     @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "cliente_id")
@@ -61,4 +65,16 @@ public class Indirizzo {
                 " (" + comune.getProvincia().getSigla() + "), " + comune.getProvincia().getRegione();
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Indirizzo indirizzo = (Indirizzo) o;
+        return tipoSede == indirizzo.tipoSede;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(tipoSede);
+    }
 }

@@ -1,4 +1,4 @@
-package it.epicode.backend.bwii.epic_energy_services.controllers;
+package it.epicode.backend.bwii.epic_energy_services.Controllers;
 
 import it.epicode.backend.bwii.epic_energy_services.Exceptions.BadRequestException;
 import it.epicode.backend.bwii.epic_energy_services.Exceptions.HandlerException;
@@ -25,6 +25,7 @@ public class AuthController {
 
     @PostMapping("/auth/register")
     public Utente register(@Validated @RequestBody UtenteDTO utenteDTO, BindingResult validation) throws BadRequestException, InternalServerErrorException {
+        System.out.println(utenteDTO);
         HandlerException.exception(validation);
         return authSvc.register(utenteDTO);
     }

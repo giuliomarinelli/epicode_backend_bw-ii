@@ -1,4 +1,4 @@
-package it.epicode.backend.bwii.epic_energy_services.controllers;
+package it.epicode.backend.bwii.epic_energy_services.Controllers;
 
 import com.cloudinary.Cloudinary;
 import it.epicode.backend.bwii.epic_energy_services.Exceptions.HandlerException;
@@ -26,6 +26,7 @@ import java.util.UUID;
 
 
 @RestController
+@RequestMapping("/api/profilo")
 public class ProfiloController {
     @Autowired
     private Cloudinary cloudinary;
@@ -36,7 +37,7 @@ public class ProfiloController {
     @Autowired
     UtenteService utenteSvc;
 
-    @PatchMapping("/profile/upload-immagine-profilo")
+    @PatchMapping("/upload-immagine-profilo")
     public Utente upload(@RequestParam("file") MultipartFile file) throws IOException, UnauthorizedException {
         UUID userId = jwtTools.extractUserIdFromReq();
         Utente u = utenteSvc.getById(userId);
@@ -44,13 +45,13 @@ public class ProfiloController {
         return utenteSvc.updateAfterUpload(u, url);
     }
 
-    @GetMapping("/profile")
+    @GetMapping("")
     public Utente getProfile() throws UnauthorizedException, BadRequestException {
         UUID userId = jwtTools.extractUserIdFromReq();
         return utenteSvc.getById(userId);
     }
 
-    @PatchMapping("/profile/aggiorna-password")
+    @PatchMapping("/aggiorna-password")
     public ConfirmRes aggiornaPassword(@Validated @RequestBody AggiornaPasswordDTO aggiornaPasswordDTO, BindingResult validation) throws it.epicode.backend.bwii.epic_energy_services.Exceptions.BadRequestException, UnauthorizedException, BadRequestException {
         HandlerException.exception(validation);
         UUID userId = jwtTools.extractUserIdFromReq();
@@ -59,14 +60,14 @@ public class ProfiloController {
         return new ConfirmRes("Password aggiornata con successo", HttpStatus.OK);
     }
 
-    @PutMapping("/profile")
+    @PutMapping("/update")
     public Utente update(@Validated @RequestBody UtenteUpdateDTO utenteUpdateDTO, BindingResult validation) throws it.epicode.backend.bwii.epic_energy_services.Exceptions.BadRequestException, UnauthorizedException, BadRequestException, InternalServerErrorException {
         HandlerException.exception(validation);
         UUID userId = jwtTools.extractUserIdFromReq();
         return utenteSvc.update(userId, utenteUpdateDTO);
     }
 
-    @DeleteMapping("/profile")
+    @DeleteMapping("/delete")
     public DeleteRes delete() throws UnauthorizedException, BadRequestException {
         UUID userId = jwtTools.extractUserIdFromReq();
         Utente u = utenteSvc.getById(userId);

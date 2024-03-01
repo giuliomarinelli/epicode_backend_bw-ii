@@ -1,4 +1,4 @@
-package it.epicode.backend.bwii.epic_energy_services.controllers;
+package it.epicode.backend.bwii.epic_energy_services.Controllers;
 
 import it.epicode.backend.bwii.epic_energy_services.Exceptions.NotFoundException;
 import it.epicode.backend.bwii.epic_energy_services.Models.entities.Provincia;

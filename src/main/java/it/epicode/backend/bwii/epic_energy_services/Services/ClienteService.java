@@ -10,7 +10,7 @@ import it.epicode.backend.bwii.epic_energy_services.repositories.ClienteReposito
 import it.epicode.backend.bwii.epic_energy_services.repositories.ComuneRepository;
 import it.epicode.backend.bwii.epic_energy_services.repositories.IndirizzoRepository;
 import it.epicode.backend.bwii.epic_energy_services.repositories.ProvinciaRepository;
-import org.apache.coyote.BadRequestException;
+import it.epicode.backend.bwii.epic_energy_services.Exceptions.BadRequestException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,8 +46,10 @@ public class ClienteService {
 
     public Page<Cliente> getAll(Pageable pageable) {
         return clienteRp.findAll(pageable).map(c -> {
+            c.getSede().getFirst().setSiglaProvincia(c.getSede().getFirst().getComune().getProvincia().getSigla());
             c.getSede().getFirst().setNomeComune(c.getSede().getFirst().getComune().getNome());
-            c.getSede().get(1).setNomeComune(c.getSede().getFirst().getComune().getNome());
+            c.getSede().get(1).setSiglaProvincia(c.getSede().get(1).getComune().getProvincia().getSigla());
+            c.getSede().get(1).setNomeComune(c.getSede().get(1).getComune().getNome());
             return c;
         });
 
@@ -56,15 +58,19 @@ public class ClienteService {
     public Cliente getById(UUID id) throws NotFoundException {
         Cliente c = clienteRp.findById(id)
                 .orElseThrow(() -> new NotFoundException("Il cliente con id " + id + " è inesistente"));
+        c.getSede().getFirst().setSiglaProvincia(c.getSede().getFirst().getComune().getProvincia().getSigla());
         c.getSede().getFirst().setNomeComune(c.getSede().getFirst().getComune().getNome());
-        c.getSede().get(1).setNomeComune(c.getSede().getFirst().getComune().getNome());
+        c.getSede().get(1).setSiglaProvincia(c.getSede().get(1).getComune().getProvincia().getSigla());
+        c.getSede().get(1).setNomeComune(c.getSede().get(1).getComune().getNome());
         return c;
     }
 
     public Cliente updateAfterUpload(Cliente cliente, String url) {
         cliente.setLogoAziendale(url);
+        cliente.getSede().getFirst().setSiglaProvincia(cliente.getSede().getFirst().getComune().getProvincia().getSigla());
         cliente.getSede().getFirst().setNomeComune(cliente.getSede().getFirst().getComune().getNome());
-        cliente.getSede().get(1).setNomeComune(cliente.getSede().getFirst().getComune().getNome());
+        cliente.getSede().get(1).setSiglaProvincia(cliente.getSede().get(1).getComune().getProvincia().getSigla());
+        cliente.getSede().get(1).setNomeComune(cliente.getSede().get(1).getComune().getNome());
         return clienteRp.save(cliente);
     }
 
@@ -82,8 +88,7 @@ public class ClienteService {
         c.setNomeContatto(cliente.nomeContatto());
         c.setCognomeContatto(cliente.cognomeContatto());
         c.setTelefonoContatto(cliente.telefonoContatto());
-        c.getSede().getFirst().setNomeComune(c.getSede().getFirst().getComune().getNome());
-        c.getSede().get(1).setNomeComune(c.getSede().getFirst().getComune().getNome());
+
         logger.info("set almost complete");
         try {
             c.setTipoCliente(TipoCliente.valueOf(cliente.tipoCliente()));
@@ -103,6 +108,8 @@ public class ClienteService {
                 .orElseThrow(
                         () -> new BadRequestException("Comune sede operativa non trovato")
                 );
+        System.out.println(comuneSedeLegale);
+        System.out.println(comuneSedeOperativa);
         try {
             logger.info("trying to save");
             clienteRp.save(c);
@@ -120,10 +127,18 @@ public class ClienteService {
         Indirizzo indirizzoSedeOperativa = new Indirizzo(cliente.sedeOperativa().via(), cliente.sedeOperativa().civico(),
                 cliente.sedeOperativa().localita(), cliente.sedeOperativa().cap(), comuneSedeOperativa, c, TipoSede.SEDE_OPERATIVA);
         logger.info("indirizzi");
+
         indirizzoRp.save(indirizzoSedeLegale);
         indirizzoRp.save(indirizzoSedeOperativa);
 
+        indirizzoSedeLegale.setNomeComune(cliente.sedeLegale().nomeComune());
+        indirizzoSedeLegale.setSiglaProvincia(cliente.sedeLegale().siglaProvincia());
+        indirizzoSedeOperativa.setNomeComune(cliente.sedeOperativa().nomeComune());
+        indirizzoSedeOperativa.setSiglaProvincia(cliente.sedeOperativa().siglaProvincia());
 
+
+        c.getSede().add(indirizzoSedeLegale);
+        c.getSede().add(indirizzoSedeOperativa);
 
         mailService.sendEmail(
                 c.getEmail(),
@@ -132,6 +147,16 @@ public class ClienteService {
         );
 
         return c;
+    }
+
+    private void updateAddress(Indirizzo i, String via, String civico, String localita, int cap, Comune comune) {
+        i.setVia(via);
+        i.setCivico(civico);
+        i.setLocalita(localita);
+        i.setCap(cap);
+        i.setComune(comune);
+        i.setNomeComune(i.getComune().getNome());
+        i.setSiglaProvincia(i.getComune().getProvincia().getSigla());
     }
 
     public Cliente update(UUID id, ClienteDTO cliente) throws NotFoundException, BadRequestException, InternalServerErrorException, it.epicode.backend.bwii.epic_energy_services.Exceptions.BadRequestException {
@@ -147,50 +172,36 @@ public class ClienteService {
         c.setNomeContatto(cliente.nomeContatto());
         c.setCognomeContatto(cliente.cognomeContatto());
         c.setTelefonoContatto(cliente.telefonoContatto());
-        c.getSede().getFirst().setNomeComune(c.getSede().getFirst().getComune().getNome());
-        c.getSede().get(1).setNomeComune(c.getSede().getFirst().getComune().getNome());
+
         try {
             c.setTipoCliente(TipoCliente.valueOf(cliente.tipoCliente()));
         } catch (IllegalArgumentException e) {
             throw new BadRequestException("tipoCliente non valido, sono ammessi solo i seguenti valori esatti: " +
                     "PA, SAS, SNC, SS, SRL, SPA, SAPA, COOPERATIVA");
         }
+
         Comune comuneSedeLegale = comuneRp.findByNomeAndProvincia(cliente.sedeLegale().nomeComune(), cliente.sedeLegale().siglaProvincia())
                 .orElseThrow(
-                        () -> new it.epicode.backend.bwii.epic_energy_services.Exceptions.BadRequestException("Comune sede legale non trovato")
+                        () -> new BadRequestException("Comune sede legale non trovato")
                 );
 
 
-        Comune comuneSedeOperativa = comuneRp.findByNomeAndProvincia(cliente.sedeLegale().nomeComune(), cliente.sedeOperativa().siglaProvincia())
+        Comune comuneSedeOperativa = comuneRp.findByNomeAndProvincia(cliente.sedeOperativa().nomeComune(), cliente.sedeOperativa().siglaProvincia())
                 .orElseThrow(
-                        () -> new it.epicode.backend.bwii.epic_energy_services.Exceptions.BadRequestException("Comune sede operativa non trovato")
+                        () -> new BadRequestException("Comune sede operativa non trovato")
                 );
 
-
-        try {
-            clienteRp.save(c);
-        } catch (DataIntegrityViolationException e) {
-            if (clienteRp.getAllEmails().contains(c.getEmail()) || clienteRp.getAllPecs().contains(c.getPec()))
-                throw new BadRequestException("L'email e/o la PEC inseriti sono già esistenti, impossibile aggiornare");
-            throw new InternalServerErrorException("Errore di violazione dell'integrità dei dati. " + e.getMessage());
-        }
-
-        Indirizzo indirizzoSedeLegale = new Indirizzo(cliente.sedeLegale().via(), cliente.sedeLegale().civico(),
-                cliente.sedeLegale().localita(), cliente.sedeLegale().cap(), comuneSedeLegale, c, TipoSede.SEDE_LEGALE);
-
-        Indirizzo indirizzoSedeOperativa = new Indirizzo(cliente.sedeOperativa().via(), cliente.sedeOperativa().civico(),
-                cliente.sedeOperativa().localita(), cliente.sedeOperativa().cap(), comuneSedeOperativa, c, TipoSede.SEDE_OPERATIVA);
-
-        indirizzoRp.save(indirizzoSedeLegale);
-        indirizzoRp.save(indirizzoSedeOperativa);
+        indirizzoRp.saveAll(indirizzoRp.findByCliente(c).stream().peek(i -> {
+            switch (i.getTipoSede()) {
+                case TipoSede.SEDE_LEGALE -> updateAddress(i, cliente.sedeLegale().via(), cliente.sedeLegale().civico(),
+                        cliente.sedeLegale().localita(), cliente.sedeLegale().cap(), comuneSedeLegale);
+                case TipoSede.SEDE_OPERATIVA ->
+                        updateAddress(i, cliente.sedeOperativa().via(), cliente.sedeOperativa().civico(),
+                                cliente.sedeOperativa().localita(), cliente.sedeLegale().cap(), comuneSedeOperativa);
+            }
+        }).toList());
 
 
-
-        mailService.sendEmail(
-                c.getEmail(),
-                "ISCRIZIONE EFFETTUATA CON SUCCESSO",
-                "Benvenuto" + c.getNomeContatto() + ", ti diamo il benvenuto in Epic Energy Services"
-        );
 
 
         mailService.sendEmail(
@@ -209,5 +220,40 @@ public class ClienteService {
         clienteRp.delete(c);
     }
 
+    public Page<Cliente> getAllOrderedByNomeContatto(Pageable pageable) {
+        return clienteRp.findAllByOrderByNomeContattoAsc(pageable);
+    }
+
+    public Page<Cliente> getAllOrderedByFatturatoAnnuale(Pageable pageable) {
+        return clienteRp.findAllByOrderByFatturatoAnnualeAsc(pageable);
+    }
+
+    public Page<Cliente> getAllOrderedByDataInserimento(Pageable pageable) {
+        return clienteRp.findAllByOrderByDataInserimentoAsc(pageable);
+    }
+
+    public Page<Cliente> getAllOrderedByDataUltimoContatto(Pageable pageable) {
+        return clienteRp.findAllByOrderByDataUltimoContattoAsc(pageable);
+    }
+
+    public Page<Cliente> findByFatturatoAnnualeBetween(
+            double minFatturato, double maxFatturato, Pageable pageable) {
+        return clienteRp.findByFatturatoAnnualeBetween(minFatturato, maxFatturato, pageable);
+    }
+
+    public Page<Cliente> findByDataInserimentoBetween(
+            LocalDate startDate, LocalDate endDate, Pageable pageable) {
+        return clienteRp.findByDataInserimentoBetween(startDate, endDate, pageable);
+    }
+
+    public Page<Cliente> findByDataUltimoContattoBetween(
+            LocalDate startDate, LocalDate endDate, Pageable pageable) {
+        return clienteRp.findByDataUltimoContattoBetween(startDate, endDate, pageable);
+    }
+
+    public Page<Cliente> findByNomeContattoContainingIgnoreCase(
+            String nomeContatto, Pageable pageable) {
+        return clienteRp.findByNomeContattoContainingIgnoreCase(nomeContatto, pageable);
+    }
 
 }

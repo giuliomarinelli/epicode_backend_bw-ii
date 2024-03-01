@@ -1,0 +1,22 @@
+<nav class="navbar bg-dark border-bottom border-body navbar-expand-md" data-bs-theme="dark">
+  <div class="container-md">
+    <div class="logo-container">
+      <a class="navbar-brand me-5" routerLink="/" title="Epic Energy Services">
+        <img src="/assets/logo.png" alt="Logo Epic Energy Services">
+      </a>
+    </div>
+    <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+      <div class="navbar-nav">
+        <a class="nav-link active" aria-current="page" routerLink="/register" *ngIf="isInLoginPage && !isInloggedIn">Registrati</a>
+        <a class="nav-link active" aria-current="page" routerLink="/" *ngIf="!isInLoginPage && !isInloggedIn ">Vai al Login</a>
+        <a (click)="logout()" class="nav-link active pointer" aria-current="page" *ngIf="isInloggedIn " routerLink="/" >Logout</a>
+        <!-- <a class="nav-link" href="#">Documentazione</a> -->
+      </div>
+    </div>
+  </div>
+</nav>
+<router-outlet></router-outlet>
+
+<!-- @if(isBrowserOnly) {
+<div id="viewport-loader"></div>
+} -->
