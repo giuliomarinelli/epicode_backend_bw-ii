@@ -16,20 +16,25 @@ export class AuthService {
   constructor(private http: HttpClient) { }
 
   public authSbj = new BehaviorSubject<iAccessToken | null>(null)
-  public isLoggedIn$ = !!this.authSbj.asObservable()
+  token$ = this.authSbj.asObservable();
+  public isLoggedIn$ = this.token$.pipe(map(u => !!u ))
   public authoritiesSbj = new BehaviorSubject<string[] | null>(null)
   public getAuthorities$: Observable<string[] | null> = this.authoritiesSbj.asObservable()
-  private authSubj = new BehaviorSubject<null | iAccessToken>(null);
   utente!: iAccessToken;
-  user$ = this.authSubj.asObservable();
   private jwtHelper = new JwtHelperService()
   private backendUrl: string = environment.backend
+
+
+
+
 
   public register(utenteDTO: UtenteDTO): Observable<iUtente | HttpErrorResponse> {
     return this.http.post<iUtente>(`${this.backendUrl}/auth/register`, utenteDTO)
   }
 
-  public login(loginDTO: LoginDTO): Observable<iAccessToken | HttpErrorResponse> {
+
+
+  public login(loginDTO: LoginDTO): Observable<iAccessToken> {
     return this.http.post<iAccessToken>(`${this.backendUrl}/auth/login`, loginDTO).pipe(map(res => {
       localStorage.setItem('accessToken', res.accessToken)
       this.authSbj.next(res)

@@ -7,9 +7,10 @@
     </div>
     <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
       <div class="navbar-nav">
-        <a class="nav-link active" aria-current="page" routerLink="/register" *ngIf="isInLoginPage">Registrati</a>
-        <a class="nav-link active" aria-current="page" routerLink="/" *ngIf="!isInLoginPage">Vai al Login</a>
-        <a class="nav-link" href="#">Documentazione</a>
+        <a class="nav-link active" aria-current="page" routerLink="/register" *ngIf="isInLoginPage && !isInloggedIn">Registrati</a>
+        <a class="nav-link active" aria-current="page" routerLink="/" *ngIf="!isInLoginPage && !isInloggedIn ">Vai al Login</a>
+        <a (click)="logout()" class="nav-link active pointer" aria-current="page" *ngIf="isInloggedIn " routerLink="/" >Logout</a>
+        <!-- <a class="nav-link" href="#">Documentazione</a> -->
       </div>
     </div>
   </div>

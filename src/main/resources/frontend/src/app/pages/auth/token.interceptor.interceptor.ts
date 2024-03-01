@@ -15,7 +15,7 @@ export class TokenInterceptorInterceptor implements HttpInterceptor {
   constructor(private authSrv: AuthService, private router: Router) {}
 
   intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
-    return this.authSrv.user$.pipe(
+    return this.authSrv.token$.pipe(
       take(1),
       switchMap(user => {
         if (!user) {
