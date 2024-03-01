@@ -38,7 +38,7 @@ import java.util.UUID;
 import static java.util.Collections.singletonMap;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-@RunWith(MockitoJUnitRunner.class)
+//@RunWith(MockitoJUnitRunner.class)
 public class ClienteControllerTest {
 
     @Mock

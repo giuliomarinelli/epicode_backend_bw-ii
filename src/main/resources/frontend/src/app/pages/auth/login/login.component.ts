@@ -4,6 +4,8 @@ import { NgForm } from '@angular/forms';
 import { BehaviorSubject } from 'rxjs';
 
 import { AuthService } from '../../../services/auth.service';
+import { LoginDTO } from '../../../Models/i-utente';
+import { iAccessToken } from '../../../Models/i-access-token';
 
   @Component({
     selector: '#login',
@@ -13,7 +15,7 @@ import { AuthService } from '../../../services/auth.service';
   export class LoginComponent {
     isLoading = false;
     userRole$ = new BehaviorSubject<string>('');
-    authSrv: any;
+
 
     constructor( private authSvc: AuthService, private router: Router){}
 
@@ -30,32 +32,9 @@ import { AuthService } from '../../../services/auth.service';
     access(form: NgForm) {
       this.isLoading = true;
 
-      this.authSrv.login(form.value).subscribe(
-        (response: any) => {
-          const token = response.token;
-          if (token) {
-            localStorage.setItem('token', token);
-            this.authSrv.getUserDetails().subscribe(
-              (user: { ruolo: { nome: any; }; username: any; id: any; foto: any; }) => {
-                const userRole = user?.ruolo?.nome;
-                const username = user?.username;
-                const id = user?.id;
-                const foto = user?.foto;
-                localStorage.setItem('userRole', userRole);
-                localStorage.setItem('username', username);
-                localStorage.setItem('id', id);
-
-                // this.roleSrv.setUserRole(userRole);
-                this.userRole$.next(userRole);
-
-                if (userRole === 'ADMIN') {
-                  this.router.navigate(['/admin']);
-                } else if (userRole === 'USER') {
-                  this.router.navigate(['/blog']);
-                } else {
-                  console.log('Ruolo non gestito:', userRole);
-                }
-
+      this.authSvc.login(form.value).subscribe(
+        (response: iAccessToken) => {
+          this.router.navigate(['/home'])
                 this.isLoading = false;
               },
               (error: any) => {
@@ -63,12 +42,7 @@ import { AuthService } from '../../../services/auth.service';
                 this.isLoading = false;
               }
             );
-          } else {
-            console.log('Il server non ha restituito un token.');
-            this.isLoading = false;
-          }
-        },
-        (error: { error: string; }) => {
+          (error:any) => {
           console.log(error);
 
           if (error.error === 'Incorrect password') {
@@ -83,7 +57,7 @@ import { AuthService } from '../../../services/auth.service';
           }
           this.isLoading = false;
         }
-      );
     }
   }
+
 
