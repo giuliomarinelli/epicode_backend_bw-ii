@@ -1,0 +1,26 @@
+h2 {
+  color: #333;
+  font-size: 24px;
+  margin-bottom: 20px;
+}
+
+ul {
+  list-style-type: none;
+  padding-left: 0;
+}
+
+li {
+  margin-bottom: 20px;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+p {
+  margin: 5px 0;
+}
+
+.no-results {
+  color: #999;
+  font-style: italic;
+}

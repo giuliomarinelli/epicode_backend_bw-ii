@@ -1,0 +1,30 @@
+
+<div class="container">
+
+  <div *ngIf="clienti.length > 0" class="text-white text-center">
+  <h2>Elenco Clienti</h2>
+  <ul>
+    <li *ngFor="let cliente of clienti" class="text-white">
+      <h3>{{ cliente.ragioneSociale }}</h3>
+      <p>Partita IVA: {{ cliente.partitaIva }}</p>
+      <p>Email: {{ cliente.email }}</p>
+      <p>Data Inserimento: {{ cliente.dataInserimento | date:'dd/MM/yyyy' }}</p>
+      <p>Data Ultimo Contatto: {{ cliente.dataUltimoContatto | date:'dd/MM/yyyy' }}</p>
+      <p>Fatturato Annuale: {{ cliente.fatturatoAnnuale | currency }}</p>
+      <p>PEC: {{ cliente.pec }}</p>
+      <p>Telefono: {{ cliente.telefono }}</p>
+      <p>Email Contatto: {{ cliente.emailContatto }}</p>
+      <p>Nome Contatto: {{ cliente.nomeContatto }}</p>
+      <p>Cognome Contatto: {{ cliente.cognomeContatto }}</p>
+      <p>Telefono Contatto: {{ cliente.telefonoContatto }}</p>
+      <p>Logo Aziendale: {{ cliente.logoAziendale }}</p>
+      <p>Tipo Cliente: {{ cliente.tipoCliente }}</p>
+      <p>Sede: {{ cliente.sede.via }}, {{ cliente.sede.civico }}, {{ cliente.sede.cap }} {{ cliente.sede.nomeComune }}</p>
+    </li>
+  </ul>
+</div>
+<div *ngIf="clienti.length === 0" class="text-white">
+  <p>Nessun cliente trovato.</p>
+</div>
+
+</div>

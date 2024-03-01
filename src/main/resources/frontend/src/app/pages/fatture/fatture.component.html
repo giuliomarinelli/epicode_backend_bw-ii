@@ -1,0 +1,21 @@
+
+<table>
+  <thead>
+    <tr>
+      <th>Numero</th>
+      <th>Data</th>
+      <th>Importo</th>
+      <th>Stato</th>
+      <th>Cliente ID</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let fattura of fatture">
+      <td>{{ fattura.numero }}</td>
+      <td>{{ fattura.data | date: 'dd/MM/yyyy' }}</td>
+      <td>{{ fattura.importo | currency }}</td>
+      <td>{{ fattura.stato }}</td>
+      <td>{{ fattura.clienteId }}</td>
+    </tr>
+  </tbody>
+</table>
