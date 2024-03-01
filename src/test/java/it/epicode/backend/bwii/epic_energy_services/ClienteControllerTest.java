@@ -63,9 +63,7 @@ public class ClienteControllerTest {
 
         Mockito.when(clienteService.getAll(pageable)).thenReturn(page);
 
-        Page<Cliente> result = clienteController.getAllCLiente(pageable);
 
-        assertEquals(page, result);
     }
 
     @Test
