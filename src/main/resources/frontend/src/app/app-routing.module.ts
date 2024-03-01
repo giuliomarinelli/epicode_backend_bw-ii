@@ -18,6 +18,8 @@ const routes: Routes = [
     canActivate:[AuthGuard],
     canActivateChild:[AuthGuard]
 },
+  { path: 'fatture', loadChildren: () => import('./pages/fatture/fatture.module').then(m => m.FattureModule) },
+  { path: 'clienti', loadChildren: () => import('./pages/clienti/clienti.module').then(m => m.ClientiModule) },
 
 
 ]
