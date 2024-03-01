@@ -2,6 +2,8 @@ import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { NgForm } from '@angular/forms';
 import { log } from 'console';
+import { AuthService } from '../../../services/auth.service';
+import { UtenteDTO } from '../../../Models/i-utente';
 
 @Component({
   selector: 'app-register',
@@ -10,26 +12,25 @@ import { log } from 'console';
 })
 export class RegisterComponent {
   isLoading = false;
-  authSrv: any;
+  utente!:UtenteDTO
 
-
-  constructor( private router: Router) {}
+  constructor( private router: Router, private authSrv: AuthService) {}
 
   registra(form: NgForm) {
     this.isLoading = true;
 
     try {
-      const userDetails = {
+       this.utente = {
         nome: form.value.nome,
         cognome: form.value.cognome,
-        eta: form.value.eta,
+        username:form.value.username,
         email: form.value.email,
         password: form.value.password
       };
 
-      this.authSrv.signup(userDetails).subscribe(
+      this.authSrv.register(this.utente).subscribe(
         () => {
-          this.router.navigate(['auth/login']);
+          this.router.navigate(['/']);
           this.isLoading = false;
         },
         (error: { error: string; }) => {

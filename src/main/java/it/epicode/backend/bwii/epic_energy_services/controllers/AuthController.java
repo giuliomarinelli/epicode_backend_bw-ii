@@ -25,6 +25,7 @@ public class AuthController {
 
     @PostMapping("/auth/register")
     public Utente register(@Validated @RequestBody UtenteDTO utenteDTO, BindingResult validation) throws BadRequestException, InternalServerErrorException {
+        System.out.println(utenteDTO);
         HandlerException.exception(validation);
         return authSvc.register(utenteDTO);
     }

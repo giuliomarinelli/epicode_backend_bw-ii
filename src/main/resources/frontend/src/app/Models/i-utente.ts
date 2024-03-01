@@ -13,7 +13,13 @@ export interface iUtente {
   accountNonLocked: boolean
 }
 
-export type UtenteDTO = Omit<iUtente, 'id' | 'avatar' | 'createdAt' | 'ruolo' | 'enabled' | 'accountNonExpired' | 'credentialsNonExpired' | 'accountNonLocked'>
+type UtenteOmit = Omit<iUtente, 'id' | 'avatar' | 'createdAt' | 'ruolo' | 'enabled' | 'accountNonExpired' | 'credentialsNonExpired' | 'accountNonLocked'>
+
+type Password = {
+  password: string
+}
+
+export type UtenteDTO = UtenteOmit & Password
 
 export interface LoginDTO {
   username: string

@@ -1,4 +1,5 @@
-import { Injectable } from '@angular/core';
+import { iAccessToken } from './../../Models/i-access-token';
+import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
 import {
   HttpRequest,
   HttpHandler,
@@ -6,37 +7,27 @@ import {
   HttpInterceptor
 } from '@angular/common/http';
 import { Observable, switchMap, take } from 'rxjs';
-import { AuthService } from './auth.service';
 import { Router } from '@angular/router';
+import { AuthService } from '../../services/auth.service';
+import { isPlatformBrowser, isPlatformServer } from '@angular/common';
 
 @Injectable()
 export class TokenInterceptorInterceptor implements HttpInterceptor {
-  token!: string | null;
-  constructor(private authSrv: AuthService, private router: Router) {}
+  constructor(private authSrv: AuthService, private router: Router, @Inject(PLATFORM_ID) private platformId: String) { }
 
-  intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
-    return this.authSrv.user$.pipe(
-      take(1),
-      switchMap(user => {
-        if (!user) {
-          return next.handle(request);
-        }
-        this.token = localStorage.getItem('Token');
-        if (this.token) {
-          const tokenValore = JSON.parse(this.token);
-          console.log('TokenValore:', tokenValore);
-          const newRequest = request.clone({
-            setHeaders: {
-              'Authorization': `Bearer ${tokenValore}`
-            }
-          });
+  intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<any>> {
 
-          return next.handle(newRequest);
-        } else {
-          this.router.navigate(['']);
-          return next.handle(request);
+    return this.authSrv.token$.pipe(switchMap((user: iAccessToken | null) => {
+      if (!user && isPlatformBrowser(PLATFORM_ID)) return next.handle(request)
+      const newReq = request.clone(
+        {
+          headers: request.headers.append('Authorization', `Bearer ${user?.accessToken}`)
         }
-      })
-    );
+      )
+      if (isPlatformBrowser(PLATFORM_ID)) {
+        return next.handle(newReq)
+      } else return next.handle(request)
+    }))
+
   }
 }

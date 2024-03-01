@@ -2,49 +2,38 @@ import { Router } from '@angular/router';
 import { Component } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { BehaviorSubject } from 'rxjs';
-import { RoleService } from '../role.service';
+
+import { AuthService } from '../../../services/auth.service';
+import { LoginDTO } from '../../../Models/i-utente';
+import { iAccessToken } from '../../../Models/i-access-token';
 
   @Component({
-    selector: 'app-login',
+    selector: '#login',
     templateUrl: './login.component.html',
     styleUrls: ['./login.component.scss']
   })
   export class LoginComponent {
     isLoading = false;
     userRole$ = new BehaviorSubject<string>('');
-    authSrv: any;
 
-    constructor( private roleSrv: RoleService, private router: Router){}
+
+    constructor( private authSvc: AuthService, private router: Router){}
+
+    // un utente può avere uno o piu ruoli, va gestita diversamente
+
+    private ruoli!: string[]
+
+
 
     access(form: NgForm) {
       this.isLoading = true;
 
-      this.authSrv.login(form.value).subscribe(
-        (response: any) => {
-          const token = response.token;
-          if (token) {
-            localStorage.setItem('token', token);
-            this.authSrv.getUserDetails().subscribe(
-              (user: { ruolo: { nome: any; }; username: any; id: any; foto: any; }) => {
-                const userRole = user?.ruolo?.nome;
-                const username = user?.username;
-                const id = user?.id;
-                const foto = user?.foto;
-                localStorage.setItem('userRole', userRole);
-                localStorage.setItem('username', username);
-                localStorage.setItem('id', id);
-
-                this.roleSrv.setUserRole(userRole);
-                this.userRole$.next(userRole);
-
-                if (userRole === 'ADMIN') {
-                  this.router.navigate(['/admin']);
-                } else if (userRole === 'USER') {
-                  this.router.navigate(['/blog']);
-                } else {
-                  console.log('Ruolo non gestito:', userRole);
-                }
-
+      this.authSvc.login(form.value).subscribe(
+        (response: iAccessToken) => {
+          this.authSvc.getAuthorities$.subscribe(res => {
+            res ? this.ruoli = res : this.ruoli = []
+          })
+          this.router.navigate(['/home'])
                 this.isLoading = false;
               },
               (error: any) => {
@@ -52,12 +41,7 @@ import { RoleService } from '../role.service';
                 this.isLoading = false;
               }
             );
-          } else {
-            console.log('Il server non ha restituito un token.');
-            this.isLoading = false;
-          }
-        },
-        (error: { error: string; }) => {
+          (error:any) => {
           console.log(error);
 
           if (error.error === 'Incorrect password') {
@@ -72,7 +56,7 @@ import { RoleService } from '../role.service';
           }
           this.isLoading = false;
         }
-      );
     }
   }
+
 

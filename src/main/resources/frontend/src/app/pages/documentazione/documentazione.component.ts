@@ -1,4 +1,6 @@
 import { Component } from '@angular/core';
+// import SwaggerUI from 'swagger-ui'
+// import customerApiDoc from './customerAPI-1.0.json'
 
 @Component({
   selector: 'app-documentazione',
