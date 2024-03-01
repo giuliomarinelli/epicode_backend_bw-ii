@@ -107,6 +107,4 @@ public class UtenteService {
         Utente u = getById(id);
         utenteRp.delete(u);
     }
-
-
 }

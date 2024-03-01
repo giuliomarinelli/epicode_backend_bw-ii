@@ -13,12 +13,14 @@ import it.epicode.backend.bwii.epic_energy_services.Exceptions.BadRequestExcepti
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.UUID;
 
@@ -69,5 +71,58 @@ public class ClienteController {
     @PreAuthorize("hasAuthority('ADMIN')")
     public void deleteCliente(@PathVariable UUID id) throws NotFoundException {
         clienteSv.delete(id);
+    }
+
+    @GetMapping("/order-by-nome")
+    public Page<Cliente> getAllOrderedByNomeContatto(Pageable pageable) {
+        return clienteSv.getAllOrderedByNomeContatto(pageable);
+    }
+
+    @GetMapping("/order-by-fatturato-annuale")
+    public Page<Cliente> getAllOrderedByFatturatoAnnuale(Pageable pageable) {
+        return clienteSv.getAllOrderedByFatturatoAnnuale(pageable);
+    }
+
+    @GetMapping("/order-by-data-inserimento")
+    public Page<Cliente> getAllOrderedByDataInserimento(Pageable pageable) {
+        return clienteSv.getAllOrderedByDataInserimento(pageable);
+    }
+
+    @GetMapping("/order-by-data-ultimo-contatto")
+    public Page<Cliente> getAllOrderedByDataUltimoContatto(Pageable pageable) {
+        return clienteSv.getAllOrderedByDataUltimoContatto(pageable);
+    }
+
+
+    @GetMapping("/nome-contatto")
+    public Page<Cliente> getByNomeContattoContainingIgnoreCase(
+            @RequestParam String nomeContatto, Pageable pageable) throws NotFoundException, BadRequestException {
+        Page<Cliente> result = clienteSv.findByNomeContattoContainingIgnoreCase(nomeContatto, pageable);
+        return result;
+    }
+
+    @GetMapping("/fatturato-annuale")
+    public Page<Cliente> getByFatturatoAnnualeBetween(
+            @RequestParam double minFatturato, @RequestParam double maxFatturato, Pageable pageable) throws NotFoundException, BadRequestException {
+        Page<Cliente> result = clienteSv.findByFatturatoAnnualeBetween(minFatturato, maxFatturato, pageable);
+        return result;
+    }
+
+    @GetMapping("/data-inserimento")
+    public Page<Cliente> getByDataInserimentoBetween(
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate,
+            Pageable pageable) throws NotFoundException, BadRequestException {
+        Page<Cliente> result = clienteSv.findByDataInserimentoBetween(startDate, endDate, pageable);
+        return result;
+    }
+
+    @GetMapping("/data-ultimo-contatto")
+    public Page<Cliente> getByDataUltimoContattoBetween(
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate,
+            Pageable pageable) throws NotFoundException, BadRequestException {
+        Page<Cliente> result = clienteSv.findByDataUltimoContattoBetween(startDate, endDate, pageable);
+        return result;
     }
 }

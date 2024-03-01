@@ -2,6 +2,7 @@ package it.epicode.backend.bwii.epic_energy_services.repositories;
 
 
 import it.epicode.backend.bwii.epic_energy_services.Models.entities.Fattura;
+import it.epicode.backend.bwii.epic_energy_services.Models.enums.StatoFattura;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.PagingAndSortingRepository;
@@ -22,7 +23,7 @@ public interface FatturaRepository extends JpaRepository<Fattura, Integer>, Pagi
     Page<Fattura> findByClienteOrderByDataAsc(Cliente cliente, Pageable pageable);
 
     @Query("SELECT f FROM Fattura f WHERE f.stato = :stato ORDER BY f.data ASC")
-    Page<Fattura> findByStatoOrderByDataAsc(String stato, Pageable pageable);
+    Page<Fattura> findByStatoOrderByDataAsc(StatoFattura stato, Pageable pageable);
 
     Page<Fattura> findByData(LocalDate data, Pageable pageable);
 

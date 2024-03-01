@@ -5,6 +5,7 @@ import it.epicode.backend.bwii.epic_energy_services.Models.RequestDTO.FatturaDTO
 import it.epicode.backend.bwii.epic_energy_services.Models.entities.Cliente;
 import it.epicode.backend.bwii.epic_energy_services.Models.entities.Fattura;
 import it.epicode.backend.bwii.epic_energy_services.Models.entities.Utente;
+import it.epicode.backend.bwii.epic_energy_services.Models.enums.StatoFattura;
 import it.epicode.backend.bwii.epic_energy_services.repositories.FatturaRepository;
 import it.epicode.backend.bwii.epic_energy_services.repositories.UtenteRepository;
 import org.apache.coyote.BadRequestException;
@@ -13,6 +14,8 @@ import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+
+import java.time.LocalDate;
 
 @Service
 public class FatturaService {
@@ -60,4 +63,21 @@ public class FatturaService {
         fatturaRepository.delete(fattura);
 
     }
+
+    public Page<Fattura> findByStato(StatoFattura stato, Pageable pageable) {
+        return fatturaRepository.findByStatoOrderByDataAsc(stato, pageable);
+    }
+
+    public Page<Fattura> findByData(LocalDate data, Pageable pageable) {
+        return fatturaRepository.findByData(data, pageable);
+    }
+
+    public Page<Fattura> findByAnno(int anno, Pageable pageable) {
+        return fatturaRepository.findByAnnoOrderByDataAsc(anno, pageable);
+    }
+
+    public Page<Fattura> findByImportoBetween(double minImporto, double maxImporto, Pageable pageable) {
+        return fatturaRepository.findByImportoBetweenOrderByDataAsc(minImporto, maxImporto, pageable);
+    }
+
 }
