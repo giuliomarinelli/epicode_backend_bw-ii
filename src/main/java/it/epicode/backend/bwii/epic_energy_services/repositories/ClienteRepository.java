@@ -22,6 +22,15 @@ public interface ClienteRepository extends JpaRepository<Cliente, UUID>, PagingA
     Page<Cliente> findByDataInserimento(LocalDate dataInserimento, Pageable pageable);
 
     Page<Cliente> findByDataUltimoContatto(LocalDate dataUltimoContatto, Pageable pageable);
+
+    Page<Cliente> findAllByOrderByNomeContattoAsc(Pageable pageable);
+
+    Page<Cliente> findAllByOrderByFatturatoAnnualeAsc(Pageable pageable);
+
+    Page<Cliente> findAllByOrderByDataInserimentoAsc(Pageable pageable);
+
+    Page<Cliente> findAllByOrderByDataUltimoContattoAsc(Pageable pageable);
+
 //    @Query("SELECT c FROM Cliente c WHERE c.sedeLegale.comune.provincia.sigla = :siglaProvincia")
 //    Page<Cliente> findByIndirizzoSedeLegaleProvincia(String siglaProvincia, Pageable pageable);
 
