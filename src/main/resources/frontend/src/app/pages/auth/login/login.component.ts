@@ -23,17 +23,16 @@ import { iAccessToken } from '../../../Models/i-access-token';
 
     private ruoli!: string[]
 
-    ngOnInit() {
-      this.authSvc.getAuthorities$.subscribe(res => {
-        res ? this.ruoli = res : this.ruoli = []
-      })
-    }
+
 
     access(form: NgForm) {
       this.isLoading = true;
 
       this.authSvc.login(form.value).subscribe(
         (response: iAccessToken) => {
+          this.authSvc.getAuthorities$.subscribe(res => {
+            res ? this.ruoli = res : this.ruoli = []
+          })
           this.router.navigate(['/home'])
                 this.isLoading = false;
               },

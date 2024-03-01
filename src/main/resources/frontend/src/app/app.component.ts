@@ -30,6 +30,11 @@ export class AppComponent {
         if (e.url !== '/' || !e.url) {
           this.isHome = false
         }
+        if (e.url.includes('/register')) {
+          this.isInLoginPage = false
+        } else {
+          this.isInLoginPage = true
+        }
       }
 
       this.authSvc.isLoggedIn$.subscribe((isIn) => {
@@ -38,16 +43,6 @@ export class AppComponent {
 
 
     })
-
-    this.router.events
-      .pipe(filter((event: NavigationEvent): event is RoutesRecognized => event instanceof RoutesRecognized))
-      .subscribe((event: RoutesRecognized) => {
-        if (event.url.includes('/register')) {
-          this.isInLoginPage = false
-        } else {
-          this.isInLoginPage = true
-        }
-      });
 
   }
 

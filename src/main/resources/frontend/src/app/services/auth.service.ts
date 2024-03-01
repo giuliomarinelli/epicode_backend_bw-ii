@@ -55,10 +55,7 @@ export class AuthService {
     const accessToken: string | null = localStorage.getItem('accessToken')
     if (!accessToken) return
     if (this.jwtHelper.isTokenExpired(accessToken)) return
-    // Interceptor da implementare
-    this.http.get<iUtente>(`${this.backendUrl}/profile`, { headers: {
-      'Authorization': 'Bearer ' + accessToken
-    } }).pipe(tap(utente => this.authoritiesSbj.next(utente.ruolo)))
+    this.http.get<iUtente>(`${this.backendUrl}/profile`).pipe(tap(utente => this.authoritiesSbj.next(utente.ruolo)))
     this.autoLogOutOrRefresh(accessToken)
     this.authSbj.next({ accessToken })
   }

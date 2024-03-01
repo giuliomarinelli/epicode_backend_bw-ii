@@ -5,7 +5,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { FormsModule } from '@angular/forms';
-import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, HttpClientModule, provideHttpClient, withFetch } from '@angular/common/http';
 import { LoaderComponent } from './util-components/loader/loader.component';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import { TokenInterceptorInterceptor } from './pages/auth/token.interceptor.interceptor';
@@ -24,11 +24,11 @@ import { TokenInterceptorInterceptor } from './pages/auth/token.interceptor.inte
   providers: [
     provideClientHydration(),
     provideAnimationsAsync(),
-    {
-      provide:HTTP_INTERCEPTORS,
-      useClass: TokenInterceptorInterceptor,
-      multi:true
-    }
+    // {
+    //   provide:HTTP_INTERCEPTORS,
+    //   useClass: TokenInterceptorInterceptor,
+    //   multi:true
+    // }
   ],
   bootstrap: [AppComponent]
 })

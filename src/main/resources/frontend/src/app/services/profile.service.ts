@@ -12,24 +12,29 @@ export class ProfileService {
 
   constructor(private authSvc: AuthService, private http: HttpClient) {  }
 
-  private isLoggedIn: boolean = this.authSvc.isLoggedIn$
   private endpoint: string = `${environment.backend}/profile`
 
   public getMyProfile(): Observable<iUtente | HttpErrorResponse | null> {
+    let isLoggedIn!: boolean
+    this.authSvc.isLoggedIn$.subscribe(res => isLoggedIn = res)
     return this.http.get<iUtente>(this.endpoint).pipe(map(res => {
-      return this.isLoggedIn ? res : null
+      return isLoggedIn ? res : null
     }))
   }
 
   public updateMyProfile(utenteDTO: UtenteDTO): Observable<iUtente | HttpErrorResponse | null> {
+    let isLoggedIn!: boolean
+    this.authSvc.isLoggedIn$.subscribe(res => isLoggedIn = res)
     return this.http.put<iUtente>(this.endpoint, utenteDTO).pipe(map(res => {
-      return this.isLoggedIn ? res : null
+      return isLoggedIn ? res : null
     }))
   }
 
   public deleteMyProfile(): Observable<Object | null> {
+    let isLoggedIn!: boolean
+    this.authSvc.isLoggedIn$.subscribe(res => isLoggedIn = res)
     return this.http.delete(this.endpoint).pipe(map(res => {
-      return this.isLoggedIn ? res : null
+      return isLoggedIn ? res : null
     }))
   }
 
