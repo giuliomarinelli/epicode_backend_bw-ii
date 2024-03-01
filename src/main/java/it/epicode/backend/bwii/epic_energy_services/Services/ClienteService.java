@@ -220,5 +220,40 @@ public class ClienteService {
         clienteRp.delete(c);
     }
 
+    public Page<Cliente> getAllOrderedByNomeContatto(Pageable pageable) {
+        return clienteRp.findAllByOrderByNomeContattoAsc(pageable);
+    }
+
+    public Page<Cliente> getAllOrderedByFatturatoAnnuale(Pageable pageable) {
+        return clienteRp.findAllByOrderByFatturatoAnnualeAsc(pageable);
+    }
+
+    public Page<Cliente> getAllOrderedByDataInserimento(Pageable pageable) {
+        return clienteRp.findAllByOrderByDataInserimentoAsc(pageable);
+    }
+
+    public Page<Cliente> getAllOrderedByDataUltimoContatto(Pageable pageable) {
+        return clienteRp.findAllByOrderByDataUltimoContattoAsc(pageable);
+    }
+
+    public Page<Cliente> findByFatturatoAnnualeBetween(
+            double minFatturato, double maxFatturato, Pageable pageable) {
+        return clienteRp.findByFatturatoAnnualeBetween(minFatturato, maxFatturato, pageable);
+    }
+
+    public Page<Cliente> findByDataInserimentoBetween(
+            LocalDate startDate, LocalDate endDate, Pageable pageable) {
+        return clienteRp.findByDataInserimentoBetween(startDate, endDate, pageable);
+    }
+
+    public Page<Cliente> findByDataUltimoContattoBetween(
+            LocalDate startDate, LocalDate endDate, Pageable pageable) {
+        return clienteRp.findByDataUltimoContattoBetween(startDate, endDate, pageable);
+    }
+
+    public Page<Cliente> findByNomeContattoContainingIgnoreCase(
+            String nomeContatto, Pageable pageable) {
+        return clienteRp.findByNomeContattoContainingIgnoreCase(nomeContatto, pageable);
+    }
 
 }
