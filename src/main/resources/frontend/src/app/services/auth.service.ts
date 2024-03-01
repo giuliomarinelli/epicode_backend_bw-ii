@@ -24,24 +24,16 @@ export class AuthService {
   private jwtHelper = new JwtHelperService()
   private backendUrl: string = environment.backend
 
-
-
-
-
   public register(utenteDTO: UtenteDTO): Observable<iUtente | HttpErrorResponse> {
     return this.http.post<iUtente>(`${this.backendUrl}/auth/register`, utenteDTO)
   }
-
-
 
   public login(loginDTO: LoginDTO): Observable<iAccessToken> {
     return this.http.post<iAccessToken>(`${this.backendUrl}/auth/login`, loginDTO).pipe(map(res => {
       localStorage.setItem('accessToken', res.accessToken)
       this.authSbj.next(res)
-      // Interceptor da implementare
-      this.http.get<iUtente>(`${this.backendUrl}/profile`, { headers: {
-        'Authorization': 'Bearer ' + res.accessToken
-      } }).pipe(tap(utente => this.authoritiesSbj.next(utente.ruolo)))
+      this.http.get<iUtente>(`${this.backendUrl}/profile`)
+      .pipe(tap(utente => this.authoritiesSbj.next(utente.ruolo)))
 
       return res
     }))
