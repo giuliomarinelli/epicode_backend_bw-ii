@@ -1,10 +1,6 @@
-import { UtenteDTO, iUtente } from './Models/i-utente';
 import { Component, Inject, PLATFORM_ID } from '@angular/core';
 import { Router, RoutesRecognized } from '@angular/router';
 import { AuthService } from './services/auth.service';
-import { HttpErrorResponse } from '@angular/common/http';
-import { firstValueFrom } from 'rxjs';
-import { on } from 'events';
 import { isPlatformBrowser } from '@angular/common';
 
 

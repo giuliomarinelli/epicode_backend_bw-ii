@@ -49,7 +49,7 @@ h1 {
   font-size: 1.5rem;
   &:hover {
     box-shadow: none;
+    border: 2px solid black;
     background-color: lighten(yellow, 20%);
-
   }
 }

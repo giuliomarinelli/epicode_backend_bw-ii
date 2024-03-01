@@ -5,3 +5,5 @@ export interface iFattura {
   stato: string
   clienteId: string
 }
+
+export type FatturaDTO = Omit<iFattura, 'numero'>
