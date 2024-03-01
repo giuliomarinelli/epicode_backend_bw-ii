@@ -17,9 +17,9 @@ export class FattureComponent {
   }
 
   getAllFatture(): void {
-    this.fattureSv.getAllFatture().subscribe((response: iFattura[]) => {
+    this.fattureSv.getAllFatture().subscribe((response: any) => {
       console.log(response);
-      this.fatture = response;
+      this.fatture = response.content;
     });
   }
 }

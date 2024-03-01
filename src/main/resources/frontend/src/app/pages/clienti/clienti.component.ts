@@ -17,8 +17,8 @@ export class ClientiComponent {
   }
 
   getAllClienti(): void {
-    this.clientiSv.getAllClienti().subscribe((response: iCliente[]) => {
-      this.clienti = response;
+    this.clientiSv.getAllClienti().subscribe((response: any) => {
+      this.clienti = response.content;
     });
   }
 }

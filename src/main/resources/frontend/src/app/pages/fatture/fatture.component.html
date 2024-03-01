@@ -10,7 +10,7 @@
     </tr>
   </thead>
   <tbody>
-    <tr *ngFor="let fattura of fatture">
+    <tr *ngFor="let fattura of fatture" class="text-white">
       <td>{{ fattura.numero }}</td>
       <td>{{ fattura.data | date: 'dd/MM/yyyy' }}</td>
       <td>{{ fattura.importo | currency }}</td>

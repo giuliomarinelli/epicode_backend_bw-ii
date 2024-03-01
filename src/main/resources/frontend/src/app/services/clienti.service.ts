@@ -22,7 +22,7 @@ export class ClientiService {
     if (this.getToken === null) {
       alert("no token available")
     }
-     return this.http.get<iCliente[]>(`${this.backendUrl}/api/clienti`,{
+     return this.http.get<iCliente[]>(`${this.backendUrl}/api/cliente`,{
         headers:{
           "Authorization":`Bearer ${this.getToken()}`
         },
