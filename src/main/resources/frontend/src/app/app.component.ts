@@ -1,4 +1,3 @@
-import { UtenteDTO, iUtente } from './Models/i-utente';
 import { Component, Inject, PLATFORM_ID } from '@angular/core';
 import { Router, RoutesRecognized, NavigationEnd, Event as NavigationEvent } from '@angular/router';
 import { AuthService } from './services/auth.service';
@@ -19,8 +18,8 @@ export class AppComponent {
 
   protected isHome: boolean = true
   protected contentLoaded = false
-  protected isInLoginPage!:boolean;
-  protected isInloggedIn!:boolean
+  protected isInLoginPage!: boolean;
+  protected isInloggedIn!: boolean
 
   get isBrowserOnly(): boolean {
     return isPlatformBrowser(this.platformId);
@@ -33,7 +32,7 @@ export class AppComponent {
         }
       }
 
-      this.authSvc.isLoggedIn$.subscribe((isIn) =>{
+      this.authSvc.isLoggedIn$.subscribe((isIn) => {
         this.isInloggedIn = isIn
       })
 
@@ -41,18 +40,18 @@ export class AppComponent {
     })
 
     this.router.events
-    .pipe(filter((event: NavigationEvent): event is RoutesRecognized => event instanceof RoutesRecognized))
-    .subscribe((event: RoutesRecognized) => {
-      if (event.url.includes('/register')) {
-        this.isInLoginPage = false
-      }else {
-        this.isInLoginPage = true
-      }
-    });
+      .pipe(filter((event: NavigationEvent): event is RoutesRecognized => event instanceof RoutesRecognized))
+      .subscribe((event: RoutesRecognized) => {
+        if (event.url.includes('/register')) {
+          this.isInLoginPage = false
+        } else {
+          this.isInLoginPage = true
+        }
+      });
 
   }
 
-  logout(){
+  logout() {
     this.authSvc.logout()
   }
 
