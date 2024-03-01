@@ -7,6 +7,7 @@ import { environment } from '../../environments/environment.development';
 import { LoginDTO, UtenteDTO, iUtente } from '../Models/i-utente';
 import { error } from 'console';
 import { JwtHelperService } from '@auth0/angular-jwt';
+import { AuthData } from '../Models/i-auth-data';
 
 @Injectable({
   providedIn: 'root'
@@ -19,8 +20,9 @@ export class AuthService {
   public isLoggedIn$ = !!this.authSbj.asObservable()
   public authoritiesSbj = new BehaviorSubject<string[] | null>(null)
   public getAuthorities$: Observable<string[] | null> = this.authoritiesSbj.asObservable()
-
-
+  private authSubj = new BehaviorSubject<null | AuthData>(null);
+  utente!: iAccessToken;
+  user$ = this.authSubj.asObservable();
   private jwtHelper = new JwtHelperService()
   private backendUrl: string = environment.backend
 
